@@ -35,28 +35,34 @@ const character = Sprite({
   x: mazeObj.start.col * cellWidth,
   y: mazeObj.start.row * cellHeight,
   color: "white",
-  width: 20,
-  height: 20,
+  width: Math.min(cellWidth, cellHeight) * 0.8,
+  height: Math.min(cellWidth, cellHeight) * 0.8,
   update: function () {
     const prevX = this.x;
     const prevY = this.y;
     if (keyPressed("left")) {
       this.x -= moveDelta;
-    } else if (keyPressed("right")) {
-      this.x += moveDelta;
-    } else if (keyPressed("up")) {
-      this.y -= moveDelta;
-    } else if (keyPressed("down")) {
-      this.y += moveDelta;
+      if (mazeSprite.some((maze) => maze.isWall && collides(maze, this))) {
+        this.x = prevX;
+      }
     }
-    const isColliding = mazeSprite.reduce((acc, val) => {
-      if (acc === true) return true;
-      if (val.isWall) return collides(this, val);
-      return false;
-    }, false);
-    if (isColliding) {
-      this.x = prevX;
-      this.y = prevY;
+    if (keyPressed("right")) {
+      this.x += moveDelta;
+      if (mazeSprite.some((maze) => maze.isWall && collides(maze, this))) {
+        this.x = prevX;
+      }
+    }
+    if (keyPressed("up")) {
+      this.y -= moveDelta;
+      if (mazeSprite.some((maze) => maze.isWall && collides(maze, this))) {
+        this.y = prevY;
+      }
+    }
+    if (keyPressed("down")) {
+      this.y += moveDelta;
+      if (mazeSprite.some((maze) => maze.isWall && collides(maze, this))) {
+        this.y = prevY;
+      }
     }
   },
 });
