@@ -9,6 +9,19 @@ let mazeSprite = [];
 const { canvas } = init();
 initKeys();
 
+const getCellColor = (value) => {
+  switch (value) {
+    case "#":
+      return "black";
+    case "S":
+      return "green";
+    case "E":
+      return "red";
+    default:
+      return "blue";
+  }
+};
+
 //object creation
 const mazeObj = generateMaze(20);
 const numRows = mazeObj.contents.length;
@@ -22,7 +35,7 @@ for (let row = 0; row < numRows; row++) {
     const mazeItem = Sprite({
       x: rectX,
       y: rectY,
-      color: mazeObj.contents[row][col].value === "#" ? "black" : "blue",
+      color: getCellColor(mazeObj.contents[row][col].value),
       width: cellWidth,
       height: cellHeight,
       isWall: mazeObj.contents[row][col].value === "#",
