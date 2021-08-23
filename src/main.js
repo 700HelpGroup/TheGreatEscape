@@ -1,5 +1,14 @@
 import generateMaze from "./maze.js";
-import { init, Sprite, GameLoop, initKeys, keyPressed, collides } from "kontra";
+import {
+  init,
+  Sprite,
+  GameLoop,
+  initKeys,
+  keyPressed,
+  collides,
+  emit,
+  on,
+} from "kontra";
 
 //states
 let moveDelta = 2;
@@ -22,12 +31,15 @@ const getCellColor = (value) => {
   }
 };
 
+const WIDTH = 1000;
+const HEIGHT = 400;
+
 //object creation
 const mazeObj = generateMaze(20);
 const numRows = mazeObj.contents.length;
 const numCols = mazeObj.contents[0].length;
-const cellWidth = 1000 / numCols;
-const cellHeight = 400 / numRows;
+const cellWidth = WIDTH / numCols;
+const cellHeight = HEIGHT / numRows;
 for (let row = 0; row < numRows; row++) {
   for (let col = 0; col < numCols; col++) {
     const rectX = col * cellWidth;
@@ -77,8 +89,37 @@ const character = Sprite({
         this.y = prevY;
       }
     }
+    if (this.x !== prevX || this.y !== prevY) {
+      emit("characterMoved");
+    }
   },
 });
+
+const handleCharacterMove = () => {
+  const radius = 100;
+  const x = character.x + character.width / 2;
+  const y = character.y + character.height / 2;
+  ctxTemp.beginPath();
+  ctxTemp.arc(x, y, radius, 0, Math.PI * 2);
+  ctxTemp.fill();
+};
+
+//fog
+const canvasTemp = document.createElement("canvas");
+canvasTemp.width = canvas.width;
+canvasTemp.height = canvas.height;
+const ctxTemp = canvasTemp.getContext("2d");
+ctxTemp.fillStyle = "grey";
+ctxTemp.fillRect(0, 0, WIDTH, HEIGHT);
+ctxTemp.globalCompositeOperation = "destination-out";
+ctxTemp.filter = "blur(20px)";
+handleCharacterMove();
+const fog = Sprite({
+  render: function () {
+    this.context.drawImage(canvasTemp, 0, 0);
+  },
+});
+on("characterMoved", handleCharacterMove);
 
 //game loop
 const loop = GameLoop({
@@ -88,6 +129,7 @@ const loop = GameLoop({
   render: function () {
     mazeSprite.forEach((sprite) => sprite.render());
     character.render();
+    fog.render();
   },
 });
 
