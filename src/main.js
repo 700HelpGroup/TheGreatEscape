@@ -31,11 +31,15 @@ const getCellColor = (value) => {
   }
 };
 
-const WIDTH = 1000;
-const HEIGHT = 400;
+const WIDTH = 2000;
+const HEIGHT = 800;
+const MAZE_GRID_COUNT = 40;
+
+canvas.width = WIDTH;
+canvas.height = HEIGHT;
 
 //object creation
-const mazeObj = generateMaze(20);
+const mazeObj = generateMaze(MAZE_GRID_COUNT);
 const numRows = mazeObj.contents.length;
 const numCols = mazeObj.contents[0].length;
 const cellWidth = WIDTH / numCols;
@@ -55,6 +59,14 @@ for (let row = 0; row < numRows; row++) {
     mazeSprite.push(mazeItem);
   }
 }
+
+const adjustWindowScroll = () => {
+  const characterPos = {
+    x: character.x + character.width / 2,
+    y: character.y + character.height / 2,
+  };
+  scroll(characterPos.x - innerWidth / 2, characterPos.y - innerHeight / 2);
+};
 
 const character = Sprite({
   x: mazeObj.start.col * cellWidth,
@@ -94,6 +106,8 @@ const character = Sprite({
     }
   },
 });
+on("characterMoved", adjustWindowScroll);
+addEventListener("resize", adjustWindowScroll);
 
 const handleCharacterMove = () => {
   const radius = 100;
