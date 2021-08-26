@@ -1,4 +1,5 @@
 import generateMaze from "./maze.js";
+import { intersects, throttle } from "./utils.js";
 import {
   init,
   Sprite,
@@ -110,7 +111,7 @@ on("characterMoved", adjustWindowScroll);
 addEventListener("resize", adjustWindowScroll);
 
 const handleCharacterMove = () => {
-  const radius = 100;
+  const radius = 200;
   const x = character.x + character.width / 2;
   const y = character.y + character.height / 2;
   ctxTemp.beginPath();
@@ -133,7 +134,7 @@ const fog = Sprite({
     this.context.drawImage(canvasTemp, 0, 0);
   },
 });
-on("characterMoved", handleCharacterMove);
+on("characterMoved", throttle(handleCharacterMove, 250));
 
 //game loop
 const loop = GameLoop({
@@ -141,7 +142,17 @@ const loop = GameLoop({
     character.update();
   },
   render: function () {
-    mazeSprite.forEach((sprite) => sprite.render());
+    const windowRect = {
+      x: scrollX,
+      y: scrollY,
+      width: innerWidth,
+      height: innerHeight,
+    };
+    mazeSprite.forEach((sprite) => {
+      if (intersects(sprite, windowRect)) {
+        sprite.render();
+      }
+    });
     character.render();
     fog.render();
   },
