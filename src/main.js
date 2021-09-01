@@ -6,7 +6,7 @@ import { fog } from "./fog";
 import { intersects } from "./utils";
 import drawIntroduction from "./intro.js";
 
-let gameRunning = false;
+let gameRunning = true;
 
 const [updateIntroduction, renderIntroduction] = drawIntroduction(context, canvas, onIntroFinish);
 document.getElementById("startButton")?.addEventListener("click", startGame);
@@ -21,6 +21,7 @@ const gameLoop = GameLoop({
       updateIntroduction(context, canvas, dt);
     } else {
       character.update();
+      character.updateCharacterMovement();
     }
   },
   render: function () {
