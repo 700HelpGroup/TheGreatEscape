@@ -1,6 +1,6 @@
 import { GameLoop } from "kontra";
 import { canvas, context } from "./init";
-import { mazeSprite } from "./customMaze";
+import { mazeSprite, tileEngine } from "./customMaze";
 import { character } from "./character";
 import { fog } from "./fog";
 import { intersects } from "./utils";
@@ -39,6 +39,7 @@ const gameLoop = GameLoop({
           sprite.render();
         }
       });
+      if (tileEngine !== null) tileEngine.render();
       character.render();
       fog.render();
     }

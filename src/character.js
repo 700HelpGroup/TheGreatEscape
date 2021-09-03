@@ -29,13 +29,19 @@ export const character = Sprite({
     const prevX = this.x;
     const prevY = this.y;
     const animationReady = this.animations !== undefined;
-    if (animationReady) this.playAnimation("idle");
+    if (animationReady) {
+      if (this.direction === "left") this.playAnimation("idleLeft");
+      else if (this.direction === "right") this.playAnimation("idleRight");
+      else if (this.direction === "up") this.playAnimation("idleUp");
+      else this.playAnimation("idleDown");
+    }
     if (keyPressed("left")) {
       this.x -= moveDelta;
       if (mazeSprite.some((maze) => maze.isWall && collides(maze, this))) {
         this.x = prevX;
       }
       if (animationReady) this.playAnimation("moveLeft");
+      this.direction = "left";
     }
     if (keyPressed("right")) {
       this.x += moveDelta;
@@ -43,6 +49,7 @@ export const character = Sprite({
         this.x = prevX;
       }
       if (animationReady) this.playAnimation("moveRight");
+      this.direction = "right";
     }
     if (keyPressed("up")) {
       this.y -= moveDelta;
@@ -50,6 +57,7 @@ export const character = Sprite({
         this.y = prevY;
       }
       if (animationReady) this.playAnimation("moveUp");
+      this.direction = "up";
     }
     if (keyPressed("down")) {
       this.y += moveDelta;
@@ -57,6 +65,7 @@ export const character = Sprite({
         this.y = prevY;
       }
       if (animationReady) this.playAnimation("moveDown");
+      this.direction = "down";
     }
     if (this.x !== prevX || this.y !== prevY) {
       emit("characterMoved");
@@ -73,8 +82,17 @@ characterImage.onload = function () {
     frameHeight: 16,
 
     animations: {
-      idle: {
+      idleDown: {
         frames: 0,
+      },
+      idleUp: {
+        frames: 4,
+      },
+      idleLeft: {
+        frames: 12,
+      },
+      idleRight: {
+        frames: 8,
       },
       moveDown: {
         frames: "0..3",
