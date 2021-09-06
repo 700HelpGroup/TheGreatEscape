@@ -1,12 +1,12 @@
 import { GameLoop } from "kontra";
 import { canvas, context } from "./init";
-import { mazeSprite } from "./customMaze";
+import { mazeSprite, tileEngine } from "./customMaze";
 import { character } from "./character";
 import { fog } from "./fog";
 import { intersects } from "./utils";
 import drawIntroduction from "./intro.js";
 
-let gameRunning = false;
+let gameRunning = true;
 
 const [updateIntroduction, renderIntroduction] = drawIntroduction(context, canvas, onIntroFinish);
 document.getElementById("startButton")?.addEventListener("click", startGame);
@@ -21,6 +21,7 @@ const gameLoop = GameLoop({
       updateIntroduction(context, canvas, dt);
     } else {
       character.update();
+      character.updateCharacterMovement();
     }
   },
   render: function () {
@@ -38,6 +39,7 @@ const gameLoop = GameLoop({
           sprite.render();
         }
       });
+      if (tileEngine !== null) tileEngine.render();
       character.render();
       fog.render();
     }
