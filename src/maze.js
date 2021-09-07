@@ -13,8 +13,8 @@ Cell.prototype.setPos = function (row, col) {
 };
 
 Cell.prototype.getNeighbors = function () {
-  row = this.row;
-  col = this.col;
+  const row = this.row;
+  const col = this.col;
   return [
     [row - 1, col - 1],
     [row - 1, col],
@@ -185,8 +185,8 @@ Maze.prototype.initPoints = function () {
   }
 };
 
-Maze.prototype.shortestBFS = function () {
-  let start = this.end;
+Maze.prototype.shortestBFS = function (end = this.end) {
+  let start = end;
   start.setDistance(0);
   start.setPred(null);
   let cellQueue = []; // enqueue is push - dequeue is shift
@@ -197,7 +197,12 @@ Maze.prototype.shortestBFS = function () {
     for (let neighbor of neighbors) {
       let row = neighbor[0];
       let col = neighbor[1];
-      if (row >= 0 && col >= 0 && row < this.contents.length && col < this.contents[0].length) {
+      if (
+        row >= 0 &&
+        col >= 0 &&
+        row < this.contents.length &&
+        col < this.contents[0].length
+      ) {
         let cell = this.contents[row][col];
         if (cell.getBFSColor() == "white" && cell.value != "#") {
           cell.setBFSColor("gray");
@@ -213,7 +218,6 @@ Maze.prototype.shortestBFS = function () {
 
 Maze.prototype.bfsTraverse = function (currentCell) {
   currentCell.value = "P";
-  this.render();
 };
 
 Maze.prototype.clearSolution = function () {
