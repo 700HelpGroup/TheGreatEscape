@@ -226,6 +226,15 @@ Maze.prototype.clearSolution = function () {
       if (element.value == "P") {
         element.value = " ";
       }
+      if (element.getPred()) {
+        element.setPred(null);
+      }
+      if (element.getBFSColor() !== "white") {
+        element.setBFSColor("white");
+      }
+      if (element.getDistance() != null) {
+        element.setDistance(null);
+      }
     }
   }
 };
