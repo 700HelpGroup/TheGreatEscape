@@ -197,12 +197,7 @@ Maze.prototype.shortestBFS = function (end = this.end) {
     for (let neighbor of neighbors) {
       let row = neighbor[0];
       let col = neighbor[1];
-      if (
-        row >= 0 &&
-        col >= 0 &&
-        row < this.contents.length &&
-        col < this.contents[0].length
-      ) {
+      if (row >= 0 && col >= 0 && row < this.contents.length && col < this.contents[0].length) {
         let cell = this.contents[row][col];
         if (cell.getBFSColor() == "white" && cell.value != "#") {
           cell.setBFSColor("gray");

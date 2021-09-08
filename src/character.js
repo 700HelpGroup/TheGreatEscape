@@ -1,30 +1,23 @@
 import { Sprite, keyPressed, collides, on, emit, SpriteSheet } from "kontra";
-import { CELL_WIDTH, CELL_HEIGHT } from "./constants";
-import { mazeObj, mazeSprite } from "./customMaze";
+import {
+  CELL_WIDTH,
+  CELL_HEIGHT,
+  MAZE_GRID_COUNT,
+  WIDTH as CANVAS_WIDTH,
+  HEIGHT as CANVAS_HEIGHT,
+} from "./constants";
+import { mazeObj } from "./customMaze";
+import { tileEngine } from "./customMaze";
 
 const moveDelta = 2;
-
-const adjustWindowScroll = () => {
-  const characterPos = {
-    x: character.x + character.width / 2,
-    y: character.y + character.height / 2,
-  };
-  scroll(characterPos.x - innerWidth / 2, characterPos.y - innerHeight / 2);
-};
-
-on("characterMoved", adjustWindowScroll);
-addEventListener("resize", adjustWindowScroll);
-
-//prevent browser from preserving scroll position on refresh
-addEventListener("beforeunload", () => {
-  scroll(0, 0);
-});
+const sx = 1.3;
+const sy = 1.3;
 
 export const character = Sprite({
   x: mazeObj.start.col * CELL_WIDTH,
   y: mazeObj.start.row * CELL_HEIGHT,
-  width: Math.min(CELL_WIDTH, CELL_HEIGHT) * 0.8,
-  height: Math.min(CELL_WIDTH, CELL_HEIGHT) * 0.8,
+  width: Math.min(CELL_WIDTH, CELL_HEIGHT) * 0.65,
+  height: Math.min(CELL_WIDTH, CELL_HEIGHT) * 0.65,
   updateCharacterMovement: function () {
     const prevX = this.x;
     const prevY = this.y;
@@ -37,32 +30,60 @@ export const character = Sprite({
     }
     if (keyPressed("left")) {
       this.x -= moveDelta;
-      if (mazeSprite.some((maze) => maze.isWall && collides(maze, this))) {
+      if (
+        tileEngine &&
+        (tileEngine.layerCollidesWith("wall", this) || tileEngine.layerCollidesWith("props", this))
+      ) {
         this.x = prevX;
+      } else {
+        if (tileEngine && tileEngine.sx - sx >= 0) {
+          tileEngine.sx -= sx;
+        }
       }
       if (animationReady) this.playAnimation("moveLeft");
       this.direction = "left";
     }
     if (keyPressed("right")) {
       this.x += moveDelta;
-      if (mazeSprite.some((maze) => maze.isWall && collides(maze, this))) {
+      if (
+        tileEngine &&
+        (tileEngine.layerCollidesWith("wall", this) || tileEngine.layerCollidesWith("props", this))
+      ) {
         this.x = prevX;
+      } else {
+        if (tileEngine && tileEngine.sx + sx <= MAZE_GRID_COUNT * CELL_WIDTH - CANVAS_WIDTH) {
+          tileEngine.sx += sx;
+        }
       }
       if (animationReady) this.playAnimation("moveRight");
       this.direction = "right";
     }
     if (keyPressed("up")) {
       this.y -= moveDelta;
-      if (mazeSprite.some((maze) => maze.isWall && collides(maze, this))) {
+      if (
+        tileEngine &&
+        (tileEngine.layerCollidesWith("wall", this) || tileEngine.layerCollidesWith("props", this))
+      ) {
         this.y = prevY;
+      } else {
+        if (tileEngine && tileEngine.sy - sy >= 0) {
+          tileEngine.sy -= sy;
+        }
       }
       if (animationReady) this.playAnimation("moveUp");
       this.direction = "up";
     }
     if (keyPressed("down")) {
       this.y += moveDelta;
-      if (mazeSprite.some((maze) => maze.isWall && collides(maze, this))) {
+      if (
+        tileEngine &&
+        (tileEngine.layerCollidesWith("wall", this) || tileEngine.layerCollidesWith("props", this))
+      ) {
         this.y = prevY;
+      } else {
+        if (tileEngine && tileEngine.sy + sy <= CELL_HEIGHT * MAZE_GRID_COUNT - CANVAS_HEIGHT) {
+          tileEngine.sy += sy;
+        }
       }
       if (animationReady) this.playAnimation("moveDown");
       this.direction = "down";

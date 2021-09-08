@@ -1,6 +1,6 @@
 import { GameLoop } from "kontra";
 import { canvas, context } from "./init";
-import { mazeSprite, tileEngine } from "./customMaze";
+import { tileEngine } from "./customMaze";
 import { character } from "./character";
 import { fog } from "./fog";
 import { intersects } from "./utils";
@@ -8,12 +8,9 @@ import drawIntroduction from "./intro.js";
 import { robots } from "./Ai";
 
 let gameRunning = true;
+let characterAdded = false;
 
-const [updateIntroduction, renderIntroduction] = drawIntroduction(
-  context,
-  canvas,
-  onIntroFinish
-);
+const [updateIntroduction, renderIntroduction] = drawIntroduction(context, canvas, onIntroFinish);
 document.getElementById("startButton")?.addEventListener("click", startGame);
 
 function onIntroFinish() {
@@ -22,6 +19,12 @@ function onIntroFinish() {
 
 const gameLoop = GameLoop({
   update: function (dt) {
+    if (characterAdded === false) {
+      if (tileEngine !== null) {
+        tileEngine.addObject(character);
+        characterAdded = true;
+      }
+    }
     if (!gameRunning) {
       updateIntroduction(context, canvas, dt);
     } else {
@@ -34,17 +37,17 @@ const gameLoop = GameLoop({
     if (!gameRunning) {
       renderIntroduction(context, canvas);
     } else {
-      const windowRect = {
-        x: scrollX,
-        y: scrollY,
-        width: innerWidth,
-        height: innerHeight,
-      };
-      mazeSprite.forEach((sprite) => {
-        if (intersects(sprite, windowRect)) {
-          sprite.render();
-        }
-      });
+      // const windowRect = {
+      //   x: scrollX,
+      //   y: scrollY,
+      //   width: innerWidth,
+      //   height: innerHeight,
+      // };
+      // mazeSprite.forEach((sprite) => {
+      //   if (intersects(sprite, windowRect)) {
+      //     sprite.render();
+      //   }
+      // });
       if (tileEngine !== null) tileEngine.render();
       character.render();
       fog.render();
