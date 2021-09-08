@@ -5,7 +5,7 @@ import { character } from "./character";
 import { fog } from "./fog";
 import { intersects } from "./utils";
 import drawIntroduction from "./intro.js";
-import { Robot } from "./Ai";
+import { robots } from "./Ai";
 
 let gameRunning = true;
 
@@ -27,7 +27,7 @@ const gameLoop = GameLoop({
     } else {
       character.update();
       character.updateCharacterMovement();
-      Robot.update();
+      robots.forEach((robot) => robot.update());
     }
   },
   render: function () {
@@ -48,7 +48,7 @@ const gameLoop = GameLoop({
       if (tileEngine !== null) tileEngine.render();
       character.render();
       fog.render();
-      Robot.render();
+      robots.forEach((robot) => robot.render());
     }
   },
 });
