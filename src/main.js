@@ -5,10 +5,15 @@ import { character } from "./character";
 import { fog } from "./fog";
 import { intersects } from "./utils";
 import drawIntroduction from "./intro.js";
+import { Robot } from "./Ai";
 
 let gameRunning = true;
 
-const [updateIntroduction, renderIntroduction] = drawIntroduction(context, canvas, onIntroFinish);
+const [updateIntroduction, renderIntroduction] = drawIntroduction(
+  context,
+  canvas,
+  onIntroFinish
+);
 document.getElementById("startButton")?.addEventListener("click", startGame);
 
 function onIntroFinish() {
@@ -22,6 +27,7 @@ const gameLoop = GameLoop({
     } else {
       character.update();
       character.updateCharacterMovement();
+      Robot.update();
     }
   },
   render: function () {
@@ -42,6 +48,7 @@ const gameLoop = GameLoop({
       if (tileEngine !== null) tileEngine.render();
       character.render();
       fog.render();
+      Robot.render();
     }
   },
 });
