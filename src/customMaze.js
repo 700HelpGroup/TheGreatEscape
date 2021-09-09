@@ -1,10 +1,31 @@
-import { Sprite, TileEngine } from "kontra";
+import { TileEngine } from "kontra";
 import { MAZE_GRID_COUNT, CELL_WIDTH, CELL_HEIGHT } from "./constants";
 import generateMaze from "./maze.js";
 import { generatePath } from "./pathGenerator";
+import { debounce } from "./utils";
 
 export const mazeObj = generateMaze(MAZE_GRID_COUNT);
 export let tileEngine = null;
+let doorLayout = [];
+let doorsOpenedLayout = [];
+let doorOpenedCache = {};
+
+export const toggleDoor = debounce((row, col) => {
+  const index = row * MAZE_GRID_COUNT + col;
+  if (doorLayout[index] === "36" && doorOpenedCache[index] === undefined) {
+    doorLayout[index + 1] = 0;
+    doorOpenedCache[index] = true;
+  } else if (doorOpenedCache[index] === true) {
+    doorLayout[index + 1] = "34";
+    delete doorOpenedCache[index];
+  } else {
+    return;
+  }
+  if (tileEngine !== null) {
+    tileEngine.setLayer("doors", doorLayout);
+    tileEngine.setLayer("doorsOpened", doorsOpenedLayout);
+  }
+}, 200);
 
 function isVerticalStraightPath(_neighbour, _value) {
   return (
@@ -243,20 +264,24 @@ const wallTileLayout = mazeObj["contents"]
 const objectPosition = [];
 
 function alreadyHaveProp(_cell, _xRange = 0, _yRange = 0) {
-  const result = objectPosition.some((deco) => {
+  const result = objectPosition.some((obj) => {
     return (
-      (deco["x"] === _cell["row"] ||
-        deco["x"] === _cell["row"] - _xRange ||
-        deco["x"] === _cell["row"] + _xRange) &&
-      (deco["y"] === _cell["col"] ||
-        deco["y"] === _cell["col"] - _yRange ||
-        deco["y"] === _cell["col"] + _yRange)
+      obj["x"] >= _cell["row"] - _xRange &&
+      obj["x"] <= _cell["row"] + _xRange &&
+      obj["y"] >= _cell["col"] - _yRange &&
+      obj["y"] <= _cell["col"] + _yRange
     );
   });
   return result;
 }
 
-const glassContainers = [];
+doorLayout = mazeObj["contents"]
+  .map((cells) => {
+    return cells.map((_) => 0);
+  })
+  .flat();
+doorsOpenedLayout = [...doorLayout];
+
 const doors = generatePath(
   mazeObj,
   mazeObj["contents"][1][1],
@@ -268,16 +293,23 @@ const doors = generatePath(
     if (
       neighbour.left["value"] === "#" &&
       neighbour.right["value"] === "#" &&
-      neighbour.topLeft["value"] !== "#" &&
       neighbour.bottomLeft["value"] !== "#" &&
-      neighbour.topRight["value"] !== "#" &&
-      neighbour.bottomRight["value"] !== "#"
+      Math.random() > 0.5
     )
       return cell;
     else return null;
   })
   .filter((cell) => cell !== null);
 
+doors.forEach((door) => {
+  doorLayout[door["row"] * MAZE_GRID_COUNT + door["col"]] = "34";
+  doorLayout[door["row"] * MAZE_GRID_COUNT + (door["col"] - 1)] = "36";
+  doorsOpenedLayout[door["row"] * MAZE_GRID_COUNT + door["col"]] = "35";
+  objectPosition.push({ x: door["row"], y: door["col"] });
+  objectPosition.push({ x: door["row"], y: door["col"] - 1 });
+});
+
+const glassContainers = [];
 const propsLayout = mazeObj["contents"]
   .map((cells) => {
     return cells.map((cell) => {
@@ -308,10 +340,8 @@ const propsLayout = mazeObj["contents"]
         cell["value"] === " " &&
         (isTopDeadEnd(neighbour, "#") ||
           isRightDeadEnd(neighbour, "#") ||
-          isLeftDeadEnd(neighbour, "#") ||
-          isBottomDeadEnd(neighbour, "#")) &&
-        !alreadyHaveProp(cell) &&
-        !alreadyHaveProp(neighbour["top"])
+          isLeftDeadEnd(neighbour, "#")) &&
+        !alreadyHaveProp(cell, 2, 2)
       ) {
         if (Math.random() > 0.75) {
           glassContainers.push({ row: cell["row"], col: cell["col"] });
@@ -323,17 +353,11 @@ const propsLayout = mazeObj["contents"]
   })
   .flat();
 
-doors.forEach((door) => {
-  propsLayout[door["row"] * MAZE_GRID_COUNT + door["col"]] = "34";
-  propsLayout[door["row"] * MAZE_GRID_COUNT + (door["col"] - 1)] = "36";
-  objectPosition.push({ x: door["row"], y: door["col"] });
-  objectPosition.push({ x: door["row"], y: door["col"] - 1 });
-});
-
 glassContainers.forEach((container) => {
   propsLayout[container["row"] * MAZE_GRID_COUNT + container["col"]] = "46";
   propsLayout[(container["row"] - 1) * MAZE_GRID_COUNT + container["col"]] = "45";
   objectPosition.push({ x: container["row"], y: container["col"] });
+  objectPosition.push({ x: container["row"] - 1, y: container["col"] });
 });
 
 const decorationsLayout = mazeObj["contents"]
@@ -385,7 +409,7 @@ const decorationsLayout = mazeObj["contents"]
         neighbour.bottom["value"] === " " &&
         !alreadyHaveProp(cell, 2, 4)
       ) {
-        if (Math.random() > 0.85) {
+        if (Math.random() > 0.4) {
           objectPosition.push({ x: cell["row"], y: cell["col"] });
           return "41";
         }
@@ -424,6 +448,14 @@ spaceTiles.onload = function () {
       {
         name: "wall",
         data: wallTileLayout,
+      },
+      {
+        name: "doorsOpened",
+        data: doorsOpenedLayout,
+      },
+      {
+        name: "doors",
+        data: doorLayout,
       },
       {
         name: "decoration",
