@@ -304,6 +304,7 @@ const doors = generatePath(
       neighbour.left["value"] === "#" &&
       neighbour.right["value"] === "#" &&
       neighbour.bottomLeft["value"] !== "#" &&
+      neighbour.topLeft["value"] !== "#" &&
       Math.random() > 0.5
     )
       return cell;
