@@ -1,14 +1,10 @@
 import { sample } from "./utils";
 
 const randomCells = (mazeObj) => {
-  const nonWallCells = mazeObj.contents
-    .flat(2)
-    .filter((cell) => cell.value !== "#");
+  const nonWallCells = mazeObj.contents.flat(2).filter((cell) => cell.value !== "#");
   const start = sample(nonWallCells);
   const end = sample(
-    nonWallCells.filter(
-      (cell) => cell.row !== start.row && cell.col !== start.col
-    )
+    nonWallCells.filter((cell) => cell.row !== start.row && cell.col !== start.col)
   );
   return [start, end];
 };
@@ -19,7 +15,7 @@ const findPath = (mazeObj, start, end) => {
   let currentCell = start;
   while (currentCell != end) {
     path.push({ row: currentCell.row, col: currentCell.col });
-    mazeObj.bfsTraverse(currentCell);
+    // mazeObj.bfsTraverse(currentCell);
     currentCell = currentCell.getPred();
   }
   path.push({ row: end.row, col: end.col });

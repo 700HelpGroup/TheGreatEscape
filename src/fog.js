@@ -26,7 +26,7 @@ handleCharacterMove();
 on("characterMoved", throttle(handleCharacterMove, 250));
 
 export const fog = Sprite({
-  // render: function () {
-  //   this.context.drawImage(canvasTemp, 0, 0);
-  // },
+  render: function () {
+    this.context.drawImage(canvasTemp, 0, 0);
+  },
 });

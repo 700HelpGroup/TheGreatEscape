@@ -1,10 +1,7 @@
 //checks if two rectangles intersect
 export const intersects = (rectangle1, rectangle2) => {
   const intersectionX1 = Math.max(rectangle1.x, rectangle2.x);
-  const intersectionX2 = Math.min(
-    rectangle1.x + rectangle1.width,
-    rectangle2.x + rectangle2.width
-  );
+  const intersectionX2 = Math.min(rectangle1.x + rectangle1.width, rectangle2.x + rectangle2.width);
   if (intersectionX2 < intersectionX1) {
     return false;
   }
@@ -30,6 +27,16 @@ export const throttle = (callback, limit) => {
         waiting = false;
       }, limit);
     }
+  };
+};
+
+export const debounce = (func, timeout = 300) => {
+  let timer;
+  return (...args) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      func.apply(this, args);
+    }, timeout);
   };
 };
 
