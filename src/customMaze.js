@@ -6,8 +6,11 @@ import { debounce } from "./utils";
 
 export const mazeObj = generateMaze(MAZE_GRID_COUNT);
 export let tileEngine = null;
+export let showGuideMap = false;
 let doorLayout = [];
 let doorsOpenedLayout = [];
+let propsLayout = [];
+let decorationsLayout = [];
 let doorOpenedCache = {};
 
 export const toggleDoor = debounce((row, col) => {
@@ -26,6 +29,13 @@ export const toggleDoor = debounce((row, col) => {
     tileEngine.setLayer("doorsOpened", doorsOpenedLayout);
   }
 }, 200);
+
+export const toggleMap = debounce((row, col) => {
+  const index = row * MAZE_GRID_COUNT + col;
+  if (decorationsLayout[index] === "41") {
+    showGuideMap = !showGuideMap;
+  }
+});
 
 function isVerticalStraightPath(_neighbour, _value) {
   return (
@@ -310,7 +320,7 @@ doors.forEach((door) => {
 });
 
 const glassContainers = [];
-const propsLayout = mazeObj["contents"]
+propsLayout = mazeObj["contents"]
   .map((cells) => {
     return cells.map((cell) => {
       if (
@@ -360,7 +370,7 @@ glassContainers.forEach((container) => {
   objectPosition.push({ x: container["row"] - 1, y: container["col"] });
 });
 
-const decorationsLayout = mazeObj["contents"]
+decorationsLayout = mazeObj["contents"]
   .map((cells) =>
     cells.map((cell) => {
       const neighbour = cell.getNeighboringCells(mazeObj);

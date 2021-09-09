@@ -6,7 +6,7 @@ import {
   WIDTH as CANVAS_WIDTH,
   HEIGHT as CANVAS_HEIGHT,
 } from "./constants";
-import { mazeObj, tileEngine, toggleDoor } from "./customMaze";
+import { mazeObj, tileEngine, toggleDoor, toggleMap } from "./customMaze";
 
 const moveDelta = 2;
 const sx = 1.3;
@@ -96,13 +96,14 @@ export const character = Sprite({
       this.direction = "down";
     }
 
-    if (keyPressed("space")) {
-      if (this.direction === "up") {
-        toggleDoor(Math.floor(this.y / CELL_HEIGHT) - 1, Math.floor(this.x / CELL_WIDTH));
-      } else if (this.direction === "down") {
-        toggleDoor(Math.floor(this.y / CELL_HEIGHT) + 1, Math.floor(this.x / CELL_WIDTH));
-      }
-    }
+    // if (keyPressed("space")) {
+    //   if (this.direction === "up") {
+    //     toggleDoor(Math.floor(this.y / CELL_HEIGHT) - 1, Math.floor(this.x / CELL_WIDTH));
+    //     toggleMap(Math.floor(this.y / CELL_HEIGHT) - 1, Math.floor(this.x / CELL_WIDTH));
+    //   } else if (this.direction === "down") {
+    //     toggleDoor(Math.floor(this.y / CELL_HEIGHT) + 1, Math.floor(this.x / CELL_WIDTH));
+    //   }
+    // }
 
     if (this.x !== prevX || this.y !== prevY) {
       emit("characterMoved");
