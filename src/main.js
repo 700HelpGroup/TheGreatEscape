@@ -76,6 +76,7 @@ const gameLoop = GameLoop({
     if (characterAdded === false) {
       if (tileEngine !== null) {
         tileEngine.addObject(character);
+        robots.forEach((robot) => tileEngine.addObject(robot));
         characterAdded = true;
         robots.forEach((robot) => tileEngine.addObject(robot));
 
@@ -104,7 +105,10 @@ const gameLoop = GameLoop({
       if (showGuideMap === true) return;
       character.update();
       character.updateCharacterMovement();
-      robots.forEach((robot) => robot.update());
+      robots.forEach((robot) => {
+        robot.update();
+        robot.updateMovement();
+      });
     }
   },
   render: function () {
@@ -113,8 +117,8 @@ const gameLoop = GameLoop({
     } else {
       if (tileEngine !== null) tileEngine.render();
       character.render();
-      fog.render();
       robots.forEach((robot) => robot.render());
+      // fog.render();
       if (showGuideMap === true) guideMap();
     }
   },
