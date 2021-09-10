@@ -77,6 +77,8 @@ const gameLoop = GameLoop({
       if (tileEngine !== null) {
         tileEngine.addObject(character);
         characterAdded = true;
+        robots.forEach((robot) => tileEngine.addObject(robot));
+
       }
     }
     if (!gameRunning) {

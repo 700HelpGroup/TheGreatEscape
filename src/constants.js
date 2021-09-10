@@ -3,4 +3,4 @@ export const HEIGHT = 400;
 export const MAZE_GRID_COUNT = 20;
 export const CELL_WIDTH = 32;
 export const CELL_HEIGHT = 32;
-export const ROBOT_COUNT = 3;
+export const ROBOT_COUNT = 5;
