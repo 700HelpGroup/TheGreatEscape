@@ -343,7 +343,6 @@ export function drawUFO(_context, _canvas, _size = 1, _xPos = 0, _yPos = 0, _ang
 export function drawFlashScreen(_context, _canvas, _maskSize = 0) {
   _context.save();
   _context.fillStyle = "black";
-  _context.globalCompositeOperation = "destination-out";
   _context.beginPath();
   _context.moveTo(0, 0);
   _context.lineTo(_canvas.width, 0);
