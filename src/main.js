@@ -1,6 +1,12 @@
 import { GameLoop, keyPressed } from "kontra";
 import { canvas, context } from "./init";
-import { tileEngine, showGuideMap, mazeObj, toggleDoor, toggleMap } from "./customMaze";
+import {
+  tileEngine,
+  showGuideMap,
+  mazeObj,
+  toggleDoor,
+  toggleMap,
+} from "./customMaze";
 import { character } from "./character";
 import { fog } from "./fog";
 import drawIntroduction from "./intro.js";
@@ -12,9 +18,15 @@ import { drawFinishScene } from "./finishScreen";
 let gameRunning = true;
 let characterAdded = false;
 
-const [updateIntroduction, renderIntroduction] = drawIntroduction(context, canvas, onIntroFinish);
+const [updateIntroduction, renderIntroduction] = drawIntroduction(
+  context,
+  canvas,
+  onIntroFinish
+);
 document.getElementById("startButton")?.addEventListener("click", startGame);
-document.getElementById("restart")?.addEventListener("click", () => restartGame);
+document
+  .getElementById("restart")
+  ?.addEventListener("click", () => restartGame);
 document.getElementById("exit")?.addEventListener("click", () => exitGame);
 
 function onIntroFinish() {
@@ -92,9 +104,11 @@ const gameLoop = GameLoop({
     if (characterAdded === false) {
       if (tileEngine !== null) {
         tileEngine.addObject(character);
-        robots.forEach((robot) => tileEngine.addObject(robot));
         characterAdded = true;
-        robots.forEach((robot) => tileEngine.addObject(robot));
+        robots.forEach(({ robot, vision }) => {
+          tileEngine.addObject(robot);
+          tileEngine.addObject(vision);
+        });
       }
     }
     if (!gameRunning) {
@@ -120,9 +134,10 @@ const gameLoop = GameLoop({
       if (showGuideMap === true) return;
       character.update();
       character.updateCharacterMovement();
-      robots.forEach((robot) => {
+      robots.forEach(({ robot, vision }) => {
         robot.update();
         robot.updateMovement();
+        vision.update();
       });
     }
   },
@@ -132,7 +147,10 @@ const gameLoop = GameLoop({
     } else {
       if (tileEngine !== null) tileEngine.render();
       character.render();
-      robots.forEach((robot) => robot.render());
+      robots.forEach(({ robot, vision }) => {
+        robot.render();
+        vision.render();
+      });
       // fog.render();
       if (showGuideMap === true) guideMap();
     }

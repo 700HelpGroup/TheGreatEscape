@@ -3,12 +3,13 @@ import { CELL_WIDTH, CELL_HEIGHT, ROBOT_COUNT } from "./constants";
 import { mazeObj } from "./customMaze";
 import { generatePath } from "./pathGenerator";
 import { character } from "./character";
+import { createVision } from "./vision";
 
 const moveDelta = 0.5;
 var playerCaptured = false;
 
 const createRobot = () => {
-  const Robot = Sprite({
+  const robot = Sprite({
     x: null,
     y: null,
     direction: "n/a",
@@ -25,7 +26,10 @@ const createRobot = () => {
     },
 
     resetPath: function (start = null, end = null) {
-      this.path = generatePath(mazeObj, start, end).map((cell) => [cell.col, cell.row]);
+      this.path = generatePath(mazeObj, start, end).map((cell) => [
+        cell.col,
+        cell.row,
+      ]);
       this.currentIndex = 0;
       this.currentcell = this.path[this.currentIndex];
     },
@@ -85,8 +89,8 @@ const createRobot = () => {
       switch (this.direction) {
         case "up":
           if (
-            character.y - Robot.y >= -1 &&
-            character.y - Robot.y < 0 /*&& (character.x === Robot.x)*/
+            character.y - robot.y >= -1 &&
+            character.y - robot.y < 0 /*&& (character.x === Robot.x)*/
           ) {
             playerCaptured = true;
             console.log("You got caught in the up direction");
@@ -95,8 +99,8 @@ const createRobot = () => {
 
         case "down":
           if (
-            character.y - Robot.y <= 1 &&
-            character.y - Robot.y > 0 /*&& (character.x === Robot.x)*/
+            character.y - robot.y <= 1 &&
+            character.y - robot.y > 0 /*&& (character.x === Robot.x)*/
           ) {
             playerCaptured = true;
             console.log("You got caught in the down direction");
@@ -105,8 +109,8 @@ const createRobot = () => {
 
         case "left":
           if (
-            character.x - Robot.x >= -1 &&
-            character.x - Robot.x < 0 /*&& (character.y === Robot.y)*/
+            character.x - robot.x >= -1 &&
+            character.x - robot.x < 0 /*&& (character.y === Robot.y)*/
           ) {
             playerCaptured = true;
             console.log("You got caught in the left direction");
@@ -115,8 +119,8 @@ const createRobot = () => {
 
         case "right":
           if (
-            character.x - Robot.x <= 1 &&
-            character.x - Robot.x > 0 /*&& (character.y === Robot.y)*/
+            character.x - robot.x <= 1 &&
+            character.x - robot.x > 0 /*&& (character.y === Robot.y)*/
           ) {
             playerCaptured = true;
             console.log("You got caught in the right direction");
@@ -124,8 +128,6 @@ const createRobot = () => {
           break;
       }
     },
-
-    
 
     updateMovement: function () {
       const prevX = this.x;
@@ -138,13 +140,12 @@ const createRobot = () => {
         this.determineDirection();
         this.currentIndex++;
 
-
         if (this.currentIndex === this.path.length) {
-          this.resetPath(mazeObj.contents[this.currentcell[1]][this.currentcell[0]]);
+          this.resetPath(
+            mazeObj.contents[this.currentcell[1]][this.currentcell[0]]
+          );
         }
 
-        
-        
         if (this.animations) {
           if (this.direction === "down") {
             this.playAnimation("moveDown");
@@ -162,15 +163,17 @@ const createRobot = () => {
       //console.log("player Captured? ", playerCaptured)
       //console.log('robot', (Robot));
       //console.log('player', (character));
-      console.log('the current cell', this.currentcell)
-      console.log('The next Cell is ', this.path[(this.currentIndex + 1)])
-      console.log('direction of the robot is, ', Robot.direction)
+      console.log("the current cell", this.currentcell);
+      console.log("The next Cell is ", this.path[this.currentIndex + 1]);
+      console.log("direction of the robot is, ", robot.direction);
     },
   });
 
-  Robot.init();
+  robot.init();
 
-  return Robot;
+  const vision = createVision(robot);
+
+  return { robot, vision };
 };
 
 export const robots = Array(ROBOT_COUNT).fill().map(createRobot);
@@ -203,8 +206,7 @@ robotImage.onload = function () {
     },
   });
 
-  robots.forEach((robot) => {
+  robots.forEach(({ robot }) => {
     robot.animations = spriteSheet.animations;
   });
-
 };
