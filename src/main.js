@@ -6,12 +6,16 @@ import { fog } from "./fog";
 import drawIntroduction from "./intro.js";
 import { robots } from "./Ai";
 import { CELL_HEIGHT, CELL_WIDTH, MAZE_GRID_COUNT } from "./constants";
+import { capturedScene } from "./capturedScreen";
+import { drawFinishScene } from "./finishScreen";
 
 let gameRunning = true;
 let characterAdded = false;
 
 const [updateIntroduction, renderIntroduction] = drawIntroduction(context, canvas, onIntroFinish);
 document.getElementById("startButton")?.addEventListener("click", startGame);
+document.getElementById("restart")?.addEventListener("click", () => restartGame);
+document.getElementById("exit")?.addEventListener("click", () => exitGame);
 
 function onIntroFinish() {
   gameRunning = true;
@@ -71,6 +75,18 @@ function guideMap() {
   context.restore();
 }
 
+function showEndGameOptions() {
+  const restartButton = document.getElementById("restart");
+  const exitButton = document.getElementById("exit");
+  if (restartButton !== null) {
+    restartButton.style.display = "block";
+  }
+
+  if (exitButton !== null) {
+    exitButton.style.display = "block";
+  }
+}
+
 const gameLoop = GameLoop({
   update: function (dt) {
     if (characterAdded === false) {
@@ -79,7 +95,6 @@ const gameLoop = GameLoop({
         robots.forEach((robot) => tileEngine.addObject(robot));
         characterAdded = true;
         robots.forEach((robot) => tileEngine.addObject(robot));
-
       }
     }
     if (!gameRunning) {
@@ -132,6 +147,10 @@ function startGame() {
   }
   gameLoop.start();
 }
+
+function restartGame() {}
+
+function exitGame() {}
 
 function cleanup() {
   const button = document.getElementById("startButton");

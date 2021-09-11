@@ -16,6 +16,33 @@
   cursor: pointer;
 }
 
+#restart:hover,
+#exit:hover {
+  background-color: white;
+  color: black;
+}
+
+#restart,
+#exit {
+  position: absolute;
+  background: none;
+  color: white;
+  font: bold 20px arial;
+  text-transform: uppercase;
+  left: 450px;
+  top: 220px;
+  border: 1px solid white;
+  padding: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: none;
+}
+
+#exit {
+  top: 280px;
+  left: 470px;
+}
+
 @-webkit-keyframes glow {
   from {
     text-shadow: 0 0 10px #bcd1f7, 0 0 12px #bcd1f7, 0 0 15px #bcd1f7, 0 0 18px #bcd1f7,

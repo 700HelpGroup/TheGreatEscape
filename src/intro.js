@@ -11,7 +11,7 @@ import {
   drawUFOBeam,
   drawFlashScreen,
 } from "./introProps";
-import { randomZigZagLine, randomParticles, easeOutSine } from "./util";
+import { randomZigZagLine, randomParticles, easeOutSine, canvasDiagnLength } from "./util";
 
 let mountainPoints = [];
 let starPoints = [];
@@ -118,10 +118,6 @@ function updateFrame3(_context, _canvas, _timer) {
 function animateFrame3(_context, _canvas) {
   if (timer < 5) return;
   drawUFOBeam(_context, _canvas);
-}
-
-function canvasDiagnLength(_canvas) {
-  return Math.sqrt(Math.pow(_canvas.width / 2, 2) + Math.pow(_canvas.height / 2, 2));
 }
 
 export default drawIntroduction;

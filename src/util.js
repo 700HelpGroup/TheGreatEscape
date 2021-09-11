@@ -119,3 +119,7 @@ export function randomZigZagLine(width, height, startx, starty, size = 1) {
 export function easeOutSine(_x) {
   return Math.sin((_x * Math.PI) / 2);
 }
+
+export function canvasDiagnLength(_canvas) {
+  return Math.sqrt(Math.pow(_canvas.width / 2, 2) + Math.pow(_canvas.height / 2, 2));
+}
