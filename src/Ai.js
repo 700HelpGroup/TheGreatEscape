@@ -46,21 +46,23 @@ const createRobot = () => {
     },
 
     determineDirection: function () {
-      if (this.currentIndex < this.path.length - 2) {
+      if (this.currentIndex < this.path.length - 1) {
         var nextCell = this.path[this.currentIndex + 1];
+        var currX = this.currentcell[0];
+        var currY = this.currentcell[1];
         var nextX = nextCell[0];
         var nextY = nextCell[1];
-        if (this.currentcell[0] > nextX) {
+        if (currX > nextX) {
           this.direction = "left";
         }
-        if (this.currentcell[0] < nextX) {
+        if (currX < nextX) {
           this.direction = "right";
         } else {
-          if (this.currentcell[1] < nextY) {
+          if (currY < nextY) {
             this.direction = "down";
           }
 
-          if (this.currentcell[1] > nextY) {
+          if (currY > nextY) {
             this.direction = "up";
           }
         }
@@ -123,7 +125,11 @@ const createRobot = () => {
       }
     },
 
+    
+
     updateMovement: function () {
+      const prevX = this.x;
+      const prevY = this.y;
       this.travelAlongPath(this.currentcell);
       if (
         this.x === this.currentcell[0] * CELL_WIDTH &&
@@ -131,9 +137,14 @@ const createRobot = () => {
       ) {
         this.determineDirection();
         this.currentIndex++;
+
+
         if (this.currentIndex === this.path.length) {
           this.resetPath(mazeObj.contents[this.currentcell[1]][this.currentcell[0]]);
         }
+
+        
+        
         if (this.animations) {
           if (this.direction === "down") {
             this.playAnimation("moveDown");
@@ -151,7 +162,9 @@ const createRobot = () => {
       //console.log("player Captured? ", playerCaptured)
       //console.log('robot', (Robot));
       //console.log('player', (character));
-      //console.log('direction of the robot is, ', Robot.direction)
+      console.log('the current cell', this.currentcell)
+      console.log('The next Cell is ', this.path[(this.currentIndex + 1)])
+      console.log('direction of the robot is, ', Robot.direction)
     },
   });
 
@@ -193,4 +206,5 @@ robotImage.onload = function () {
   robots.forEach((robot) => {
     robot.animations = spriteSheet.animations;
   });
+
 };
