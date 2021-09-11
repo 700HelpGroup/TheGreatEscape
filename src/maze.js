@@ -1,3 +1,5 @@
+import { CELL_HEIGHT, CELL_WIDTH } from "./constants";
+
 const Cell = function (cellType) {
   this.value = cellType;
   this.row = null;
@@ -197,7 +199,12 @@ Maze.prototype.shortestBFS = function (end = this.end) {
     for (let neighbor of neighbors) {
       let row = neighbor[0];
       let col = neighbor[1];
-      if (row >= 0 && col >= 0 && row < this.contents.length && col < this.contents[0].length) {
+      if (
+        row >= 0 &&
+        col >= 0 &&
+        row < this.contents.length &&
+        col < this.contents[0].length
+      ) {
         let cell = this.contents[row][col];
         if (cell.getBFSColor() == "white" && cell.value != "#") {
           cell.setBFSColor("gray");
@@ -232,6 +239,12 @@ Maze.prototype.clearSolution = function () {
       }
     }
   }
+};
+
+Maze.prototype.findCell = function (x, y) {
+  const row = Math.floor(y / CELL_HEIGHT);
+  const col = Math.floor(x / CELL_WIDTH);
+  return this.contents[row][col];
 };
 
 function generateMaze(_size) {
