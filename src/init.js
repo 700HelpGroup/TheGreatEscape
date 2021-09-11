@@ -1,8 +1,8 @@
 import { init, initKeys } from "kontra";
-import { WIDTH, HEIGHT } from "./constants";
+import { CANVAS_WIDTH, CANVAS_HEIGHT } from "./constants";
 
 export const { canvas, context } = init();
 initKeys();
 
-canvas.width = WIDTH;
-canvas.height = HEIGHT;
+canvas.width = CANVAS_WIDTH;
+canvas.height = CANVAS_HEIGHT;

@@ -10,7 +10,7 @@ module.exports = {
     clean: true,
   },
   plugins: [
-    new HtmlWebpackPlugin({ template: "./src/template.html" }),
+    new HtmlWebpackPlugin({ template: "./src/index.html" }),
     new ZipPlugin({ path: __dirname, filename: "build.zip" }),
   ],
 };

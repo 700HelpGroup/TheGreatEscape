@@ -10,8 +10,8 @@ import {
   drawCar,
   drawUFOBeam,
   drawFlashScreen,
-} from "./introProps";
-import { randomZigZagLine, randomParticles, easeOutSine, canvasDiagnLength } from "./util";
+} from "./canvasObjects";
+import { randomZigZagLine, randomParticles, easeOutSine, canvasDiagnLength } from "./helper";
 
 let mountainPoints = [];
 let starPoints = [];
@@ -27,8 +27,9 @@ let finishCallback = null;
 
 //draw background
 function drawBackground(_context, _canvas) {
-  starPoints = randomParticles(_canvas.width, _canvas.height);
-  mountainPoints = randomZigZagLine(_canvas.width, _canvas.height, 0, _canvas.height * 0.5);
+  if (starPoints.length === 0) starPoints = randomParticles(_canvas.width, _canvas.height);
+  if (mountainPoints.length === 0)
+    mountainPoints = randomZigZagLine(_canvas.width, _canvas.height, 0, _canvas.height * 0.5);
   blackScreenSize = canvasDiagnLength(_canvas);
   drawNightSky(_context, _canvas, starPoints);
   drawMountainRange(_context, _canvas, mountainPoints);
@@ -45,6 +46,8 @@ function updateIntroduction(_context, _canvas, _dt) {
   updateFrame1(_context, _canvas, timer);
   updateFrame2(_context, _canvas, timer);
   updateFrame3(_context, _canvas, timer);
+
+  if (timer >= 10 && finishCallback !== null) finishCallback();
 }
 
 function renderIntroduction(_context, _canvas) {
@@ -59,11 +62,24 @@ function renderIntroduction(_context, _canvas) {
   drawFlashScreen(_context, _canvas, blackScreenSize);
 }
 
+function clear() {
+  mountainPoints = [];
+  starPoints = [];
+  timer = 0;
+  titleOpacity = 1;
+  tileShift = 0;
+  UFOXPosition = 100;
+  UFOYPosition = -30;
+  UFOSize = 0.08;
+  UFORotation = 0;
+  blackScreenSize = 0;
+}
+
 //this function draws a static introduction page
 function drawIntroduction(_context, _canvas, _finishCallback) {
   if (typeof _finishCallback === "function") finishCallback = _finishCallback;
   drawBackground(_context, _canvas);
-  return [updateIntroduction, renderIntroduction];
+  return [updateIntroduction, renderIntroduction, clear, drawBackground];
 }
 
 //Frame 1 text fades out
@@ -104,15 +120,12 @@ function animateFrame2(_context, _canvas) {
   drawRoadtiles(_context, _canvas, tileShift);
 }
 
-//Frame 3 black screen and storyline
+//Frame 3 black screen and game start
 function updateFrame3(_context, _canvas, _timer) {
   if (timer < 7) return;
 
   if (blackScreenSize > 0) blackScreenSize -= 5;
   if (blackScreenSize < 0) blackScreenSize = 0;
-
-  if (timer < 10) return;
-  if (finishCallback !== null) finishCallback();
 }
 
 function animateFrame3(_context, _canvas) {

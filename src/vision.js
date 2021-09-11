@@ -50,6 +50,7 @@ export const createVision = (robot) => {
     },
     findDistanceToNearestWall() {
       const wall = this.findNearestWall();
+      if (!wall) return Number.MAX_SAFE_INTEGER;
       switch (robot.direction) {
         case "up":
           return Math.abs(this.y - (wall.row * CELL_HEIGHT + CELL_HEIGHT));
@@ -60,7 +61,7 @@ export const createVision = (robot) => {
         case "right":
           return Math.abs(this.x - wall.col * CELL_WIDTH);
         default:
-          return 0;
+          return Number.MAX_SAFE_INTEGER;
       }
     },
     update() {

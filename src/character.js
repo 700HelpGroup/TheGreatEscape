@@ -1,23 +1,16 @@
 import { Sprite, keyPressed, emit, SpriteSheet } from "kontra";
-import {
-  CELL_WIDTH,
-  CELL_HEIGHT,
-  MAZE_GRID_COUNT,
-  WIDTH as CANVAS_WIDTH,
-  HEIGHT as CANVAS_HEIGHT,
-} from "./constants";
-import { mazeObj, tileEngine, toggleDoor, toggleMap } from "./customMaze";
+import { CELL_WIDTH, CELL_HEIGHT, MAZE_GRID_COUNT, CANVAS_WIDTH, CANVAS_HEIGHT } from "./constants";
 
 const moveDelta = 2;
 const sx = 1.3;
 const sy = 1.3;
 
 export const character = Sprite({
-  x: mazeObj.start.col * CELL_WIDTH,
-  y: mazeObj.start.row * CELL_HEIGHT,
+  x: CELL_WIDTH,
+  y: CELL_HEIGHT,
   width: Math.min(CELL_WIDTH, CELL_HEIGHT) * 0.65,
   height: Math.min(CELL_WIDTH, CELL_HEIGHT) * 0.65,
-  updateCharacterMovement: function () {
+  updateCharacterMovement: function (tileEngine) {
     const prevX = this.x;
     const prevY = this.y;
     const animationReady = this.animations !== undefined;
@@ -31,9 +24,7 @@ export const character = Sprite({
       this.x -= moveDelta;
       if (
         tileEngine &&
-        (tileEngine.layerCollidesWith("wall", this) ||
-          tileEngine.layerCollidesWith("props", this) ||
-          tileEngine.layerCollidesWith("doors", this))
+        (tileEngine.layerCollidesWith("wall", this) || tileEngine.layerCollidesWith("props", this))
       ) {
         this.x = prevX;
       } else {
@@ -48,9 +39,7 @@ export const character = Sprite({
       this.x += moveDelta;
       if (
         tileEngine &&
-        (tileEngine.layerCollidesWith("wall", this) ||
-          tileEngine.layerCollidesWith("props", this) ||
-          tileEngine.layerCollidesWith("doors", this))
+        (tileEngine.layerCollidesWith("wall", this) || tileEngine.layerCollidesWith("props", this))
       ) {
         this.x = prevX;
       } else {
@@ -65,9 +54,7 @@ export const character = Sprite({
       this.y -= moveDelta;
       if (
         tileEngine &&
-        (tileEngine.layerCollidesWith("wall", this) ||
-          tileEngine.layerCollidesWith("props", this) ||
-          tileEngine.layerCollidesWith("doors", this))
+        (tileEngine.layerCollidesWith("wall", this) || tileEngine.layerCollidesWith("props", this))
       ) {
         this.y = prevY;
       } else {
@@ -82,9 +69,7 @@ export const character = Sprite({
       this.y += moveDelta;
       if (
         tileEngine &&
-        (tileEngine.layerCollidesWith("wall", this) ||
-          tileEngine.layerCollidesWith("props", this) ||
-          tileEngine.layerCollidesWith("doors", this))
+        (tileEngine.layerCollidesWith("wall", this) || tileEngine.layerCollidesWith("props", this))
       ) {
         this.y = prevY;
       } else {
@@ -95,15 +80,6 @@ export const character = Sprite({
       if (animationReady) this.playAnimation("moveDown");
       this.direction = "down";
     }
-
-    // if (keyPressed("space")) {
-    //   if (this.direction === "up") {
-    //     toggleDoor(Math.floor(this.y / CELL_HEIGHT) - 1, Math.floor(this.x / CELL_WIDTH));
-    //     toggleMap(Math.floor(this.y / CELL_HEIGHT) - 1, Math.floor(this.x / CELL_WIDTH));
-    //   } else if (this.direction === "down") {
-    //     toggleDoor(Math.floor(this.y / CELL_HEIGHT) + 1, Math.floor(this.x / CELL_WIDTH));
-    //   }
-    // }
 
     if (this.x !== prevX || this.y !== prevY) {
       emit("characterMoved");

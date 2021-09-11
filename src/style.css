@@ -16,14 +16,14 @@
   cursor: pointer;
 }
 
-#restart:hover,
-#exit:hover {
+#restartButton:hover,
+#exitButton:hover {
   background-color: white;
   color: black;
 }
 
-#restart,
-#exit {
+#restartButton,
+#exitButton {
   position: absolute;
   background: none;
   color: white;
@@ -38,12 +38,12 @@
   display: none;
 }
 
-#exit {
+#exitButton {
   top: 280px;
   left: 470px;
 }
 
-@-webkit-keyframes glow {
+@keyframes glow {
   from {
     text-shadow: 0 0 10px #bcd1f7, 0 0 12px #bcd1f7, 0 0 15px #bcd1f7, 0 0 18px #bcd1f7,
       0 0 20px #bcd1f7;
