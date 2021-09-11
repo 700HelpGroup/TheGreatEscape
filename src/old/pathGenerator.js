@@ -1,4 +1,4 @@
-import { sample } from "./helper";
+import { sample } from "./utils";
 
 const randomCells = (mazeObj) => {
   const nonWallCells = mazeObj.contents.flat(2).filter((cell) => cell.value !== "#");

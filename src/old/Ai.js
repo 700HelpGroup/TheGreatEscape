@@ -4,6 +4,7 @@ import { mazeObj } from "./customMaze";
 import { generatePath } from "./pathGenerator";
 import { character } from "./character";
 import { createVision } from "./vision";
+import { tileEngine } from "./customMaze";
 
 const moveDelta = 0.5;
 var playerCaptured = false;
@@ -26,10 +27,7 @@ const createRobot = () => {
     },
 
     resetPath: function (start = null, end = null) {
-      this.path = generatePath(mazeObj, start, end).map((cell) => [
-        cell.col,
-        cell.row,
-      ]);
+      this.path = generatePath(mazeObj, start, end).map((cell) => [cell.col, cell.row]);
       this.currentIndex = 0;
       this.currentcell = this.path[this.currentIndex];
     },
@@ -37,6 +35,7 @@ const createRobot = () => {
     travelAlongPath: function () {
       var x = this.currentcell[0] * CELL_WIDTH;
       var y = this.currentcell[1] * CELL_HEIGHT;
+
       if (this.x >= x) {
         this.x -= moveDelta;
       } else {
@@ -141,9 +140,7 @@ const createRobot = () => {
         this.currentIndex++;
 
         if (this.currentIndex === this.path.length) {
-          this.resetPath(
-            mazeObj.contents[this.currentcell[1]][this.currentcell[0]]
-          );
+          this.resetPath(mazeObj.contents[this.currentcell[1]][this.currentcell[0]]);
         }
 
         if (this.animations) {

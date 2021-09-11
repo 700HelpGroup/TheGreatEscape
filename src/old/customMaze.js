@@ -2,7 +2,7 @@ import { TileEngine } from "kontra";
 import { MAZE_GRID_COUNT, CELL_WIDTH, CELL_HEIGHT } from "./constants";
 import generateMaze from "./maze.js";
 import { generatePath } from "./pathGenerator";
-import { debounce } from "./helper";
+import { debounce } from "./utils";
 
 export const mazeObj = generateMaze(MAZE_GRID_COUNT);
 export let tileEngine = null;
