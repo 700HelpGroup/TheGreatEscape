@@ -74,6 +74,28 @@ Cell.prototype.getPred = function () {
   return this.pred;
 };
 
+Cell.prototype.isWall = function () {
+  return this.value === "#";
+};
+
+Cell.prototype.isGround = function () {
+  return this.value === " ";
+};
+
+Cell.prototype.isStart = function () {
+  return this.value === "S";
+};
+
+Cell.prototype.isEnd = function () {
+  return this.value === "E";
+};
+
+var Maze = function () {
+  this.contents = [];
+  this.start = null;
+  this.end = null;
+};
+
 var Maze = function () {
   this.contents = [];
   this.start = null;

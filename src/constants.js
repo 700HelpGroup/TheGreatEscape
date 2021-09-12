@@ -11,3 +11,9 @@ export const GAME_STATES = {
   END: 3,
   GAMEOVER: 4,
 };
+export const PROP_VALUE = {
+  WALL: "#",
+  GROUND: " ",
+  START: "S",
+  END: "E",
+};
