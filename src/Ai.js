@@ -1,7 +1,6 @@
 import { collides, Sprite, SpriteSheet } from "kontra";
 import { CELL_WIDTH, CELL_HEIGHT, ROBOT_COUNT } from "./constants";
 import { generatePath } from "./pathGenerator";
-import { character } from "./character";
 import { createVision } from "./vision";
 
 const moveDelta = 0.5;
