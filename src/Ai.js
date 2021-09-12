@@ -6,8 +6,7 @@ import { createVision } from "./vision";
 
 const moveDelta = 0.5;
 
-export const createRobot = (mazeObj, robotImage, capturedCallback) => {
-  if (typeof capturedCallback !== "function") capturedCallback = () => {};
+export const createRobot = (mazeObj, robotImage) => {
   const spriteSheet = SpriteSheet({
     image: robotImage,
     frameWidth: 32,
@@ -51,7 +50,10 @@ export const createRobot = (mazeObj, robotImage, capturedCallback) => {
     },
 
     resetPath: function (start = null, end = null) {
-      this.path = generatePath(mazeObj, start, end).map((cell) => [cell.col, cell.row]);
+      this.path = generatePath(mazeObj, start, end).map((cell) => [
+        cell.col,
+        cell.row,
+      ]);
       this.currentIndex = 0;
       this.currentcell = this.path[this.currentIndex];
     },
@@ -96,46 +98,6 @@ export const createRobot = (mazeObj, robotImage, capturedCallback) => {
       }
     },
 
-    playerDetect: function () {
-      switch (this.direction) {
-        case "up":
-          if (
-            character.y - robot.y >= -1 &&
-            character.y - robot.y < 0 /*&& (character.x === Robot.x)*/
-          ) {
-            capturedCallback(this);
-          }
-          break;
-
-        case "down":
-          if (
-            character.y - robot.y <= 1 &&
-            character.y - robot.y > 0 /*&& (character.x === Robot.x)*/
-          ) {
-            capturedCallback(this);
-          }
-          break;
-
-        case "left":
-          if (
-            character.x - robot.x >= -1 &&
-            character.x - robot.x < 0 /*&& (character.y === Robot.y)*/
-          ) {
-            capturedCallback(this);
-          }
-          break;
-
-        case "right":
-          if (
-            character.x - robot.x <= 1 &&
-            character.x - robot.x > 0 /*&& (character.y === Robot.y)*/
-          ) {
-            capturedCallback(this);
-          }
-          break;
-      }
-    },
-
     updateMovement: function () {
       const prevX = this.x;
       const prevY = this.y;
@@ -148,7 +110,9 @@ export const createRobot = (mazeObj, robotImage, capturedCallback) => {
         this.currentIndex++;
 
         if (this.currentIndex === this.path.length) {
-          this.resetPath(mazeObj.contents[this.currentcell[1]][this.currentcell[0]]);
+          this.resetPath(
+            mazeObj.contents[this.currentcell[1]][this.currentcell[0]]
+          );
         }
 
         if (this.animations) {
@@ -164,7 +128,6 @@ export const createRobot = (mazeObj, robotImage, capturedCallback) => {
         }
       }
       this.currentcell = this.path[this.currentIndex];
-      this.playerDetect();
     },
   });
 

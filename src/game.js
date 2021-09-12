@@ -1,4 +1,4 @@
-import { TileEngine, keyPressed } from "kontra";
+import { TileEngine, keyPressed, collides } from "kontra";
 import {
   groundTileLayout,
   wallTileLayout,
@@ -6,7 +6,12 @@ import {
   propsLayout,
   mazeObj,
 } from "./customMaze";
-import { CELL_HEIGHT, CELL_WIDTH, MAZE_GRID_COUNT, ROBOT_COUNT } from "./constants";
+import {
+  CELL_HEIGHT,
+  CELL_WIDTH,
+  MAZE_GRID_COUNT,
+  ROBOT_COUNT,
+} from "./constants";
 import { character } from "./character";
 import { createRobot } from "./Ai";
 import { debounce, canvasDiagnLength } from "./helper";
@@ -22,9 +27,21 @@ let restartButton = null;
 let exitButton = null;
 let onExitCallback = null;
 
+function checkCapture() {
+  if (
+    robots.some(
+      ({ robot, vision }) =>
+        collides(robot, character) || collides(vision, character)
+    )
+  ) {
+    playerCaptured = true;
+  }
+}
+
 function updateGame() {
   if (tileEngine === null) return;
-  if (keyPressed("space")) toggleGuideMap({ x: character.x, y: character.y - CELL_HEIGHT });
+  if (keyPressed("space"))
+    toggleGuideMap({ x: character.x, y: character.y - CELL_HEIGHT });
   if (guideMapShowing) return;
   if (playerCaptured) return;
   character.update();
@@ -34,6 +51,7 @@ function updateGame() {
     robot.updateMovement();
     vision.update();
   });
+  checkCapture();
 }
 
 function renderGame(context, canvas) {
@@ -44,7 +62,8 @@ function renderGame(context, canvas) {
     robot.render();
     vision.render();
   });
-  if (guideMapShowing) drawGuideMap(context, canvas, mazeObj, character.x, character.y);
+  if (guideMapShowing)
+    drawGuideMap(context, canvas, mazeObj, character.x, character.y);
   if (playerCaptured) renderCapturedScene(context, canvas);
 }
 
@@ -59,7 +78,16 @@ function renderCapturedScene(context, canvas) {
   const xPos = canvas.width * 0.5 - 150;
   const yPos = 100;
   drawFlashScreen(context, canvas, Math.max(blackScreenSize, 0));
-  drawText(context, canvas, "GAME OVER", Math.min(textItr * 0.04, 1), "50px", "white", xPos, yPos);
+  drawText(
+    context,
+    canvas,
+    "GAME OVER",
+    Math.min(textItr * 0.04, 1),
+    "50px",
+    "white",
+    xPos,
+    yPos
+  );
   drawText(
     context,
     canvas,
@@ -153,7 +181,7 @@ function initTileEngine(assets) {
 function initRobot(assets) {
   robots = Array(ROBOT_COUNT)
     .fill()
-    .map(() => createRobot(mazeObj, assets["robot"], () => (playerCaptured = true)));
+    .map(() => createRobot(mazeObj, assets["robot"]));
 }
 
 function initKeyOptions() {
