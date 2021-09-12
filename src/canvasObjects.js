@@ -6,6 +6,7 @@ import {
   addStroke,
   transformAboutCenter,
 } from "./helper";
+import { MAZE_GRID_COUNT, CELL_WIDTH, CELL_HEIGHT } from "./constants";
 
 export function drawText(
   _context,
@@ -392,25 +393,56 @@ export function drawFlashScreen(_context, _canvas, _maskSize = 0) {
   _context.restore();
 }
 
-export function drawStoryLine(_context, _canvas, _scrollAmount = 0) {
-  const story = [
-    "You are just driving home from work",
-    "and unfortunately aliens see you a their",
-    "perfect test subject. Gather your courage",
-    "as you are going to experience the most",
-    "intense escape room in the world.",
-  ];
+export function drawGuideMap(context, canvas, mazeObj, xPos, yPos) {
+  context.save();
+  const mapPadding = 10;
+  const size = canvas.height - mapPadding * 2;
+  const cellSize = Math.floor(size / MAZE_GRID_COUNT);
+  const startX = canvas.width / 2 - size / 2;
+  const startY = mapPadding;
+  const characterSize = cellSize * 0.4;
+  context.shadowColor = "white";
+  context.shadowBlur = 5;
+  context.globalAlpha = 0.2;
+  context.fillStyle = "white";
+  context.fillRect(0, 0, canvas.width, canvas.height);
+  context.globalAlpha = 0.8;
+  context.fillStyle = "#00203fff";
+  context.fillRect(startX, startY, size, size);
 
-  _context.save();
-  const xPos = 50;
-  const yPos = 100;
-  const textHeight = 40;
-  _context.rect(xPos, 100 - textHeight, _canvas.width, textHeight * 3);
-  _context.clip();
-  for (let i = 0; i < story.length; i++) {
-    _context.fillStyle = "white";
-    _context.font = "bold 20px Verdana";
-    _context.fillText(story[i], xPos, yPos + i * textHeight - _scrollAmount);
-  }
-  _context.restore();
+  context.beginPath();
+  mazeObj["contents"].forEach((rowCell) => {
+    rowCell.forEach((cell) => {
+      if (cell.isWall()) {
+        context.fillStyle = "#adefd1ff";
+      } else if (cell.isStart()) {
+        context.fillStyle = "#DFDCE5";
+      } else if (cell.isEnd()) {
+        context.fillStyle = "#B9D452";
+      } else {
+        context.fillStyle = "#00203fff";
+      }
+      context.fillRect(
+        startX + cell["col"] * cellSize,
+        startY + cell["row"] * cellSize,
+        cellSize,
+        cellSize
+      );
+    });
+  });
+
+  context.beginPath();
+  context.fillStyle = "#F8BC24";
+  const xPosRatio = xPos / (CELL_WIDTH * MAZE_GRID_COUNT);
+  const yPosRatio = yPos / (CELL_HEIGHT * MAZE_GRID_COUNT);
+  context.arc(
+    startX + xPosRatio * size + characterSize,
+    startY + yPosRatio * size + characterSize,
+    characterSize,
+    0,
+    2 * Math.PI
+  );
+  context.fill();
+
+  context.restore();
 }
