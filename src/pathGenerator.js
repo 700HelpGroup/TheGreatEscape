@@ -1,10 +1,16 @@
 import { sample } from "./helper";
 
 const randomCells = (mazeObj) => {
-  const nonWallCells = mazeObj.contents.flat(2).filter((cell) => cell.value !== "#");
-  const start = sample(nonWallCells);
+  const nonWallCells = mazeObj.contents
+    .flat(2)
+    .filter((cell) => cell.value !== "#");
+  const start = sample(
+    nonWallCells.filter((cell) => cell.row > 5 && cell.col > 5)
+  );
   const end = sample(
-    nonWallCells.filter((cell) => cell.row > 8 && cell.col > 8)
+    nonWallCells.filter(
+      (cell) => cell.row !== start.row && cell.col !== start.col
+    )
   );
   return [start, end];
 };
