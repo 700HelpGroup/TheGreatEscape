@@ -14,7 +14,7 @@
     "zip-webpack-plugin": "^4.0.1"
   },
   "scripts": {
-    "start": "webpack serve --open",
+    "start": "webpack serve --open --mode=development",
     "build": "webpack",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
