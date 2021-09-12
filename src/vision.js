@@ -1,5 +1,5 @@
 import { Sprite } from "kontra";
-import { CELL_HEIGHT, CELL_WIDTH, HEIGHT, WIDTH } from "./constants";
+import { CELL_HEIGHT, CELL_WIDTH, CANVAS_HEIGHT, CANVAS_WIDTH } from "./constants";
 import { mazeObj } from "./customMaze";
 
 export const createVision = (robot) => {
@@ -26,7 +26,7 @@ export const createVision = (robot) => {
         }
       } else if (robot.direction === "down") {
         let y = this.y;
-        while (y < HEIGHT) {
+        while (y < CANVAS_HEIGHT) {
           const cell = mazeObj.findCell(this.x, y);
           if (cell.value !== " ") return cell;
           y += CELL_HEIGHT;
@@ -40,7 +40,7 @@ export const createVision = (robot) => {
         }
       } else if (robot.direction === "right") {
         let x = this.x;
-        while (x < WIDTH) {
+        while (x < CANVAS_WIDTH) {
           const cell = mazeObj.findCell(x, this.y);
           if (cell.value !== " ") return cell;
           x += CELL_WIDTH;
@@ -78,14 +78,8 @@ export const createVision = (robot) => {
       this.context.rotate(this.rotationLookup[robot.direction]);
       this.context.beginPath();
       this.context.moveTo(0, 0);
-      this.context.lineTo(
-        this.width,
-        (-this.height * this.width) / this.maxWidth / 2
-      );
-      this.context.lineTo(
-        this.width,
-        (this.height * this.width) / this.maxWidth / 2
-      );
+      this.context.lineTo(this.width, (-this.height * this.width) / this.maxWidth / 2);
+      this.context.lineTo(this.width, (this.height * this.width) / this.maxWidth / 2);
       this.context.fill();
     },
   });
