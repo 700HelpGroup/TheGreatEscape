@@ -27,6 +27,7 @@ let textItr = 0;
 let restartButton = null;
 let exitButton = null;
 let onExitCallback = null;
+let onFinishCallback = null;
 let character = null;
 
 function checkCapture() {
@@ -39,6 +40,20 @@ function checkCapture() {
     )
   ) {
     playerCaptured = true;
+  }
+}
+
+function checkFinish() {
+  const { x, y, width, height } = character;
+  const end = mazeObj.end;
+  const endRect = {
+    x: end.col * CELL_WIDTH,
+    y: end.row * CELL_HEIGHT,
+    width: CELL_WIDTH,
+    height: CELL_HEIGHT,
+  };
+  if (intersects({ x, y, width, height }, endRect)) {
+    onFinishCallback?.();
   }
 }
 
@@ -57,6 +72,7 @@ function updateGame() {
     vision.update();
   });
   checkCapture();
+  checkFinish();
 }
 
 function renderGame(context, canvas) {
@@ -216,8 +232,9 @@ function initGame(assets) {
   });
 }
 
-export default function Game(context, canavs, assets, onExit) {
+export default function Game(context, canavs, assets, onExit, onFinish) {
   if (typeof onExit === "function") onExitCallback = onExit;
+  if (typeof onFinish === "function") onFinishCallback = onFinish;
   initGame(assets);
   return [updateGame, renderGame, clear, initGame];
 }

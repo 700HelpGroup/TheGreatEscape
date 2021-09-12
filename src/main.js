@@ -3,6 +3,7 @@ import { load, setImagePath, GameLoop, imageAssets } from "kontra";
 import { GAME_STATES } from "./constants";
 import Introduction from "./introduction";
 import Game from "./game";
+import { drawFinishScene } from "./finishScreen";
 
 let gameState = GAME_STATES.IDLE;
 
@@ -10,14 +11,19 @@ setImagePath("assets/");
 load("character.png", "robot.png", "tiles.png").then(() => {
   document.getElementById("startButton")?.addEventListener("click", startGame);
 
-  const [updateIntroduction, renderIntroduction, clearIntroduction, reDrawIntroduction] =
-    Introduction(context, canvas, () => (gameState = GAME_STATES.RUNNING));
+  const [
+    updateIntroduction,
+    renderIntroduction,
+    clearIntroduction,
+    reDrawIntroduction,
+  ] = Introduction(context, canvas, () => (gameState = GAME_STATES.RUNNING));
 
   const [updateGame, renderGame, clearGame, reLaunchGame] = Game(
     context,
     canvas,
     imageAssets,
-    exitGame
+    exitGame,
+    finishGame
   );
 
   const gameLoop = GameLoop({
@@ -42,6 +48,10 @@ load("character.png", "robot.png", "tiles.png").then(() => {
           break;
         case GAME_STATES.RUNNING:
           renderGame(context, canvas);
+          break;
+        case GAME_STATES.END:
+          drawFinishScene(context, canvas);
+          break;
         default:
           break;
       }
@@ -61,6 +71,12 @@ load("character.png", "robot.png", "tiles.png").then(() => {
     gameState = GAME_STATES.IDLE;
     const startButton = document.getElementById("startButton");
     if (startButton !== null) startButton.style.display = "block";
+  }
+
+  function finishGame() {
+    clearIntroduction();
+    clearGame();
+    gameState = GAME_STATES.END;
   }
 
   gameLoop.start();
