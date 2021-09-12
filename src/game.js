@@ -65,6 +65,7 @@ function updateGame() {
   if (guideMapShowing) return;
   if (playerCaptured) return;
   character.update();
+  fog.update(character);
   character.updateCharacterMovement(tileEngine);
   robots.forEach(({ robot, vision }) => {
     robot.update();
@@ -226,6 +227,7 @@ function initGame(assets) {
   initCharacter(assets);
   initKeyOptions();
   tileEngine.addObject(character);
+  tileEngine.addObject(fog);
   robots.forEach(({ robot, vision }) => {
     tileEngine.addObject(robot);
     tileEngine.addObject(vision);
