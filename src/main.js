@@ -11,12 +11,7 @@ setImagePath("assets/");
 load("character.png", "robot.png", "tiles.png").then(() => {
   document.getElementById("startButton")?.addEventListener("click", startGame);
 
-  const [
-    updateIntroduction,
-    renderIntroduction,
-    clearIntroduction,
-    reDrawIntroduction,
-  ] = Introduction(context, canvas, () => (gameState = GAME_STATES.RUNNING));
+  const [clearIntroduction, reDrawIntroduction] = Introduction(context, canvas);
 
   const [updateGame, renderGame, clearGame, reLaunchGame] = Game(
     context,
@@ -29,9 +24,6 @@ load("character.png", "robot.png", "tiles.png").then(() => {
   const gameLoop = GameLoop({
     update: function (dt) {
       switch (gameState) {
-        case GAME_STATES.START:
-          updateIntroduction(context, canvas, dt);
-          break;
         case GAME_STATES.RUNNING:
           updateGame();
         default:
@@ -42,9 +34,6 @@ load("character.png", "robot.png", "tiles.png").then(() => {
       switch (gameState) {
         case GAME_STATES.IDLE:
           reDrawIntroduction(context, canvas);
-          break;
-        case GAME_STATES.START:
-          renderIntroduction(context, canvas);
           break;
         case GAME_STATES.RUNNING:
           renderGame(context, canvas);
@@ -81,6 +70,3 @@ load("character.png", "robot.png", "tiles.png").then(() => {
 
   gameLoop.start();
 });
-//   .catch(() => {
-//     window.alert("An error occured while loading resources, please refresh and try again");
-//   });

@@ -1,10 +1,5 @@
 import { Sprite } from "kontra";
-import {
-  CELL_HEIGHT,
-  CELL_WIDTH,
-  CANVAS_HEIGHT,
-  CANVAS_WIDTH,
-} from "./constants";
+import { CELL_HEIGHT, CELL_WIDTH, CANVAS_HEIGHT, CANVAS_WIDTH } from "./constants";
 import { mazeObj } from "./customMaze";
 
 export const createVision = (robot) => {
@@ -119,14 +114,8 @@ export const createVision = (robot) => {
       this.context.rotate(this.rotationLookup[robot.direction]);
       this.context.beginPath();
       this.context.moveTo(0, 0);
-      this.context.lineTo(
-        this.width,
-        (-this.height * this.width) / this.maxWidth / 2
-      );
-      this.context.lineTo(
-        this.width,
-        (this.height * this.width) / this.maxWidth / 2
-      );
+      this.context.lineTo(this.width, (-this.height * this.width) / this.maxWidth / 2);
+      this.context.lineTo(this.width, (this.height * this.width) / this.maxWidth / 2);
       this.context.fill();
     },
   });

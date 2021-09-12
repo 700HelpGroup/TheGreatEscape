@@ -1,5 +1,5 @@
-import { collides, Sprite, SpriteSheet } from "kontra";
-import { CELL_WIDTH, CELL_HEIGHT, ROBOT_COUNT } from "./constants";
+import { Sprite, SpriteSheet } from "kontra";
+import { CELL_WIDTH, CELL_HEIGHT } from "./constants";
 import { generatePath } from "./pathGenerator";
 import { createVision } from "./vision";
 
@@ -13,19 +13,19 @@ export const createRobot = (mazeObj, robotImage) => {
 
     animations: {
       moveDown: {
-        frames: "0..3",
+        frames: "0..1",
         frameRate: 10,
       },
       moveUp: {
-        frames: "4..7",
+        frames: "2..3",
         frameRate: 10,
       },
       moveRight: {
-        frames: "8..11",
+        frames: "4..5",
         frameRate: 10,
       },
       moveLeft: {
-        frames: "12..15",
+        frames: "6..7",
         frameRate: 10,
       },
     },
@@ -49,10 +49,7 @@ export const createRobot = (mazeObj, robotImage) => {
     },
 
     resetPath: function (start = null, end = null) {
-      this.path = generatePath(mazeObj, start, end).map((cell) => [
-        cell.col,
-        cell.row,
-      ]);
+      this.path = generatePath(mazeObj, start, end).map((cell) => [cell.col, cell.row]);
       this.currentIndex = 0;
       this.currentcell = this.path[this.currentIndex];
     },
@@ -109,9 +106,7 @@ export const createRobot = (mazeObj, robotImage) => {
         this.currentIndex++;
 
         if (this.currentIndex === this.path.length) {
-          this.resetPath(
-            mazeObj.contents[this.currentcell[1]][this.currentcell[0]]
-          );
+          this.resetPath(mazeObj.contents[this.currentcell[1]][this.currentcell[0]]);
         }
 
         if (this.animations) {

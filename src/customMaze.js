@@ -148,34 +148,20 @@ function decorationTiles(cell, neighbour) {
       const botLeftIsWall = neighbour["bottomLeft"].isWall();
       const botrightIsWall = neighbour["bottomRight"].isWall();
       if (botLeftIsWall && !botrightIsWall) {
-        return "34";
+        return "32";
       } else if (!botLeftIsWall && !botrightIsWall) {
-        return "35";
+        return "33";
       } else if (!botLeftIsWall && botrightIsWall) {
-        return "36";
+        return "34";
       } else if (botLeftIsWall && botrightIsWall) {
-        return "37";
+        return "35";
       }
     }
     if (!alreadyHaveProp(cell, 2, 4) && Math.random() >= 0.4) {
-      return "38";
+      return "36";
     }
   }
 
-  return 0;
-}
-
-function proptTiles(cell, neighbour) {
-  if (
-    cell.isGround() &&
-    (isLeftDeadEnd(neighbour, PROP_VALUE.WALL) ||
-      isTopDeadEnd(neighbour, PROP_VALUE.WALL) ||
-      isRightDeadEnd(neighbour, PROP_VALUE.WALL) ||
-      isBottomDeadEnd(neighbour, PROP_VALUE.WALL)) &&
-    Math.random() >= 0.7
-  ) {
-    return "39";
-  }
   return 0;
 }
 
@@ -195,11 +181,6 @@ function generateTileMap(tileFunc) {
 
 export const groundTileLayout = generateTileMap(floorTile);
 export const wallTileLayout = generateTileMap(wallTile);
-export const propsLayout = generateTileMap((cell, neighbour) => {
-  const propIndex = proptTiles(cell, neighbour);
-  if (propIndex !== 0) objectPosition.push({ x: cell["row"], y: cell["col"] });
-  return propIndex;
-});
 export const decorationsLayout = generateTileMap((cell, neighbour) => {
   const tileIndex = decorationTiles(cell, neighbour);
   if (tileIndex !== 0) objectPosition.push({ x: cell["row"], y: cell["col"] });
