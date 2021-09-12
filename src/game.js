@@ -11,6 +11,7 @@ import { createCharacter } from "./character";
 import { createRobot } from "./Ai";
 import { debounce, canvasDiagnLength } from "./helper";
 import { drawGuideMap, drawFlashScreen, drawText } from "./canvasObjects";
+import { fog } from "./fog";
 
 let tileEngine = null;
 let robots = [];
@@ -52,6 +53,7 @@ function renderGame(context, canvas) {
   if (character === null) return;
   tileEngine.render();
   character.render();
+  fog.render();
   robots.forEach(({ robot, vision }) => {
     robot.render();
     vision.render();

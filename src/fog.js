@@ -1,20 +1,20 @@
 import { Sprite, on } from "kontra";
-import { WIDTH, HEIGHT } from "./constants";
+import { CANVAS_WIDTH, CANVAS_HEIGHT } from "./constants";
 import { character } from "./character";
-import { throttle } from "./utils";
+import { throttle } from "./helper";
 
 const canvasTemp = document.createElement("canvas");
-canvasTemp.width = WIDTH;
-canvasTemp.height = HEIGHT;
+canvasTemp.width = CANVAS_WIDTH;
+canvasTemp.height = CANVAS_HEIGHT;
 
 const ctxTemp = canvasTemp.getContext("2d");
 ctxTemp.fillStyle = "grey";
-ctxTemp.fillRect(0, 0, WIDTH, HEIGHT);
+ctxTemp.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 ctxTemp.globalCompositeOperation = "destination-out";
 ctxTemp.filter = "blur(20px)";
 
 const handleCharacterMove = () => {
-  const radius = 200;
+  const radius = 100;
   const x = character.x + character.width / 2;
   const y = character.y + character.height / 2;
   ctxTemp.beginPath();

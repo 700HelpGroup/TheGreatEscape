@@ -4,7 +4,7 @@ const randomCells = (mazeObj) => {
   const nonWallCells = mazeObj.contents.flat(2).filter((cell) => cell.value !== "#");
   const start = sample(nonWallCells);
   const end = sample(
-    nonWallCells.filter((cell) => cell.row !== start.row && cell.col !== start.col)
+    nonWallCells.filter((cell) => cell.row > 8 && cell.col > 8)
   );
   return [start, end];
 };
