@@ -4,14 +4,23 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="src/style.css"/>
+    <link rel="stylesheet" href="src/style.css" />
   </head>
   <body style="margin: 0; overflow: hidden">
     <div id="root">
-      <canvas style="background: darkgray"></canvas>
+      <canvas></canvas>
       <h1 id="startButton">START</h1>
       <button id="restartButton">Try Again!</button>
-      <button id="exitButton">I Quit</button>
+      <button id="exitButton">I Quite</button>
+      <div id="instructionContainer">
+        <button id="upButton">Up</button>
+        <button id="downButton">Down</button>
+        <button id="leftButton">Left</button>
+        <button id="rightButton">Right</button>
+        <button id="spaceButton">Space</button>
+        <label id="controlLabel">Character control</label>
+        <label id="spaceLabel">Press space to activate objects</label>
+      </div>
     </div>
   </body>
 </html>
