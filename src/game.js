@@ -6,10 +6,15 @@ import {
   propsLayout,
   mazeObj,
 } from "./customMaze";
-import { CELL_HEIGHT, CELL_WIDTH, MAZE_GRID_COUNT, ROBOT_COUNT } from "./constants";
+import {
+  CELL_HEIGHT,
+  CELL_WIDTH,
+  MAZE_GRID_COUNT,
+  ROBOT_COUNT,
+} from "./constants";
 import { createCharacter } from "./character";
 import { createRobot } from "./Ai";
-import { debounce, canvasDiagnLength } from "./helper";
+import { debounce, canvasDiagnLength, intersects } from "./helper";
 import { drawGuideMap, drawFlashScreen, drawText } from "./canvasObjects";
 import { fog } from "./fog";
 
@@ -25,8 +30,13 @@ let onExitCallback = null;
 let character = null;
 
 function checkCapture() {
+  const { x, y, width, height } = character;
   if (
-    robots.some(({ robot, vision }) => collides(robot, character) || collides(vision, character))
+    robots.some(
+      ({ robot, vision }) =>
+        collides(robot, character) ||
+        intersects(vision.boundingRect, { x, y, width, height })
+    )
   ) {
     playerCaptured = true;
   }
@@ -35,7 +45,8 @@ function checkCapture() {
 function updateGame() {
   if (tileEngine === null) return;
   if (character === null) return;
-  if (keyPressed("space")) toggleGuideMap({ x: character.x, y: character.y - CELL_HEIGHT });
+  if (keyPressed("space"))
+    toggleGuideMap({ x: character.x, y: character.y - CELL_HEIGHT });
   if (guideMapShowing) return;
   if (playerCaptured) return;
   character.update();
@@ -58,7 +69,8 @@ function renderGame(context, canvas) {
     robot.render();
     vision.render();
   });
-  if (guideMapShowing) drawGuideMap(context, canvas, mazeObj, character.x, character.y);
+  if (guideMapShowing)
+    drawGuideMap(context, canvas, mazeObj, character.x, character.y);
   if (playerCaptured) renderCapturedScene(context, canvas);
 }
 
@@ -73,7 +85,16 @@ function renderCapturedScene(context, canvas) {
   const xPos = canvas.width * 0.5 - 150;
   const yPos = 100;
   drawFlashScreen(context, canvas, Math.max(blackScreenSize, 0));
-  drawText(context, canvas, "GAME OVER", Math.min(textItr * 0.04, 1), "50px", "white", xPos, yPos);
+  drawText(
+    context,
+    canvas,
+    "GAME OVER",
+    Math.min(textItr * 0.04, 1),
+    "50px",
+    "white",
+    xPos,
+    yPos
+  );
   drawText(
     context,
     canvas,
@@ -167,7 +188,9 @@ function initTileEngine(assets) {
 function initRobot(assets) {
   robots = Array(ROBOT_COUNT)
     .fill()
-    .map(() => createRobot(mazeObj, assets["robot"], () => (playerCaptured = false)));
+    .map(() =>
+      createRobot(mazeObj, assets["robot"], () => (playerCaptured = false))
+    );
 }
 
 function initCharacter(assets) {

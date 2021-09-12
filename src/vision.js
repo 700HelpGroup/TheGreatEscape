@@ -1,5 +1,10 @@
 import { Sprite } from "kontra";
-import { CELL_HEIGHT, CELL_WIDTH, CANVAS_HEIGHT, CANVAS_WIDTH } from "./constants";
+import {
+  CELL_HEIGHT,
+  CELL_WIDTH,
+  CANVAS_HEIGHT,
+  CANVAS_WIDTH,
+} from "./constants";
 import { mazeObj } from "./customMaze";
 
 export const createVision = (robot) => {
@@ -10,6 +15,7 @@ export const createVision = (robot) => {
     maxWidth: 50,
     width: 50,
     height: robot.height,
+    boundingRect: { x: 0, y: 0, width: 0, height: 0 },
     rotationLookup: {
       up: -Math.PI / 2,
       down: Math.PI / 2,
@@ -64,10 +70,45 @@ export const createVision = (robot) => {
           return Number.MAX_SAFE_INTEGER;
       }
     },
+    getBoundingRect() {
+      switch (robot.direction) {
+        case "up":
+          return {
+            x: this.x - this.height / 2,
+            y: this.y - this.width,
+            width: this.height,
+            height: this.width,
+          };
+        case "down":
+          return {
+            x: this.x - this.height / 2,
+            y: this.y,
+            width: this.height,
+            height: this.width,
+          };
+        case "left":
+          return {
+            x: this.x - this.width,
+            y: this.y - this.height / 2,
+            width: this.width,
+            height: this.height,
+          };
+        case "right":
+          return {
+            x: this.x,
+            y: this.y - this.height / 2,
+            width: this.width,
+            height: this.height,
+          };
+        default:
+          return null;
+      }
+    },
     update() {
       this.x = robot.x + robot.width / 2;
       this.y = robot.y + robot.height / 2;
       this.width = Math.min(this.maxWidth, this.findDistanceToNearestWall());
+      this.boundingRect = this.getBoundingRect() ?? this.boundingRect;
     },
     render() {
       const gradient = this.context.createLinearGradient(0, 0, this.width, 0);
@@ -78,8 +119,14 @@ export const createVision = (robot) => {
       this.context.rotate(this.rotationLookup[robot.direction]);
       this.context.beginPath();
       this.context.moveTo(0, 0);
-      this.context.lineTo(this.width, (-this.height * this.width) / this.maxWidth / 2);
-      this.context.lineTo(this.width, (this.height * this.width) / this.maxWidth / 2);
+      this.context.lineTo(
+        this.width,
+        (-this.height * this.width) / this.maxWidth / 2
+      );
+      this.context.lineTo(
+        this.width,
+        (this.height * this.width) / this.maxWidth / 2
+      );
       this.context.fill();
     },
   });
