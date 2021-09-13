@@ -20,7 +20,6 @@ canvas {
   text-transform: uppercase;
   left: calc(50% - 50px);
   top: 245px;
-  animation: glow 1s ease-in-out infinite alternate;
   user-select: none;
   cursor: pointer;
 }
@@ -50,16 +49,4 @@ canvas {
 #exitButton {
   top: 280px;
   left: calc(50% - 25px);
-}
-
-@keyframes glow {
-  from {
-    text-shadow: 0 0 10px #bcd1f7, 0 0 12px #bcd1f7, 0 0 15px #bcd1f7,
-      0 0 18px #bcd1f7, 0 0 20px #bcd1f7;
-  }
-
-  to {
-    text-shadow: 0 0 18px #bcd1f7, 0 0 22px #bcd1f7, 0 0 25px #bcd1f7,
-      0 0 30px #bcd1f7, 0 0 35px #bcd1f7;
-  }
 }
