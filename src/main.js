@@ -4,6 +4,7 @@ import { GAME_STATES } from "./constants";
 import Introduction from "./introduction";
 import Game from "./game";
 import { drawFinishScene } from "./finishScreen";
+import "./style.css";
 
 let gameState = GAME_STATES.IDLE;
 const assetsToLoad = ["tiles.png"];
