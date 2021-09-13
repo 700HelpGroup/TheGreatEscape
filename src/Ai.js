@@ -1,36 +1,11 @@
-import { Sprite, SpriteSheet } from "kontra";
+import { Sprite } from "kontra";
 import { CELL_WIDTH, CELL_HEIGHT } from "./constants";
 import { generatePath } from "./pathGenerator";
 import { createVision } from "./vision";
 
 const moveDelta = 0.5;
 
-export const createRobot = (mazeObj, robotImage) => {
-  const spriteSheet = SpriteSheet({
-    image: robotImage,
-    frameWidth: 32,
-    frameHeight: 32,
-
-    animations: {
-      moveDown: {
-        frames: "0..1",
-        frameRate: 10,
-      },
-      moveUp: {
-        frames: "2..3",
-        frameRate: 10,
-      },
-      moveRight: {
-        frames: "4..5",
-        frameRate: 10,
-      },
-      moveLeft: {
-        frames: "6..7",
-        frameRate: 10,
-      },
-    },
-  });
-
+export const createRobot = (mazeObj) => {
   const robot = Sprite({
     x: null,
     y: null,
@@ -40,7 +15,7 @@ export const createRobot = (mazeObj, robotImage) => {
     path: null,
     currentIndex: null,
     currentcell: null,
-    animations: spriteSheet.animations,
+    color: "royalblue",
 
     init: function () {
       this.resetPath();
@@ -49,7 +24,10 @@ export const createRobot = (mazeObj, robotImage) => {
     },
 
     resetPath: function (start = null, end = null) {
-      this.path = generatePath(mazeObj, start, end).map((cell) => [cell.col, cell.row]);
+      this.path = generatePath(mazeObj, start, end).map((cell) => [
+        cell.col,
+        cell.row,
+      ]);
       this.currentIndex = 0;
       this.currentcell = this.path[this.currentIndex];
     },
@@ -106,19 +84,9 @@ export const createRobot = (mazeObj, robotImage) => {
         this.currentIndex++;
 
         if (this.currentIndex === this.path.length) {
-          this.resetPath(mazeObj.contents[this.currentcell[1]][this.currentcell[0]]);
-        }
-
-        if (this.animations) {
-          if (this.direction === "down") {
-            this.playAnimation("moveDown");
-          } else if (this.direction === "up") {
-            this.playAnimation("moveUp");
-          } else if (this.direction === "left") {
-            this.playAnimation("moveLeft");
-          } else if (this.direction === "right") {
-            this.playAnimation("moveRight");
-          }
+          this.resetPath(
+            mazeObj.contents[this.currentcell[1]][this.currentcell[0]]
+          );
         }
       }
       this.currentcell = this.path[this.currentIndex];
