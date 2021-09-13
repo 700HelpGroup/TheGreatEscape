@@ -60,31 +60,6 @@ const onAllAssetLoaded = () => {
     },
   });
 
-  function update() {
-    switch (gameState) {
-      case GAME_STATES.RUNNING:
-        updateGame();
-      default:
-        break;
-    }
-  }
-
-  function render() {
-    switch (gameState) {
-      case GAME_STATES.IDLE:
-        reDrawIntroduction(context, canvas);
-        break;
-      case GAME_STATES.RUNNING:
-        renderGame(context, canvas);
-        break;
-      case GAME_STATES.END:
-        drawFinishScene(context, canvas);
-        break;
-      default:
-        break;
-    }
-  }
-
   function startGame() {
     const startButton = document.getElementById("startButton");
     if (startButton !== null) startButton.style.display = "none";

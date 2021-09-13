@@ -202,8 +202,8 @@ function initGame(assets) {
 }
 
 export default function Game(context, canavs, assets, onExit, onFinish) {
-  // if (typeof onExit === "function") onExitCallback = onExit;
-  // if (typeof onFinish === "function") onFinishCallback = onFinish;
-  // initGame(assets);
+  if (typeof onExit === "function") onExitCallback = onExit;
+  if (typeof onFinish === "function") onFinishCallback = onFinish;
+  initGame(assets);
   return [updateGame, renderGame, clear, initGame];
 }
