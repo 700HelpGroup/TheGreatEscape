@@ -6,7 +6,7 @@ import Game from "./game";
 import { drawFinishScene } from "./finishScreen";
 
 let gameState = GAME_STATES.IDLE;
-const assetsToLoad = ["character.png", "robot.png", "tiles.png"];
+const assetsToLoad = ["robot.png", "tiles.png"];
 let imageAssets = {};
 
 assetsToLoad.forEach((asset) => {
