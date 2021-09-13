@@ -15,7 +15,6 @@ assetsToLoad.forEach((asset) => {
   image.onload = function () {
     imageAssets[asset.replace(".png", "")] = image;
     if (Object.values(imageAssets).length === assetsToLoad.length) {
-      console.log(imageAssets);
       onAllAssetLoaded();
     }
   };

@@ -51,7 +51,7 @@ export function drawTitle(_context, _canvas, _opacity = 1) {
   );
 }
 
-export function drawNightSky(_context, _canvas, _points) {
+export function drawNightSky(_context, _canvas) {
   _context.save();
   const xMax = _canvas.width;
   const yMax = _canvas.height;
@@ -63,17 +63,6 @@ export function drawNightSky(_context, _canvas, _points) {
   grd.addColorStop(1, "rgb(205,230,221)");
   _context.fillStyle = grd;
   _context.fillRect(0, 0, xMax, yMax);
-
-  const particles = _points;
-  particles.forEach((particle) => {
-    if (particle.size > 1) {
-      _context.shadowBlur = Math.floor(Math.random() * 15 + 5);
-      _context.shadowColor = "white";
-    }
-    _context.fillStyle =
-      "hsla(" + particle.hue + ", 30%, 80%, ." + particle.opacity1 + particle.opacity2 + ")";
-    _context.fillRect(particle.x, particle.y, particle.size, particle.size);
-  });
 
   _context.restore();
 }
@@ -87,7 +76,14 @@ export function drawFlashScreen(_context, _canvas, _maskSize = 0) {
   _context.lineTo(_canvas.width, _canvas.height);
   _context.lineTo(0, _canvas.height);
   _context.closePath();
-  _context.arc(_canvas.width / 2, _canvas.height / 2, _maskSize, 0, Math.PI * 2, true);
+  _context.arc(
+    _canvas.width / 2,
+    _canvas.height / 2,
+    _maskSize,
+    0,
+    Math.PI * 2,
+    true
+  );
   _context.closePath();
   _context.fill();
 
