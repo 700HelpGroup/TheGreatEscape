@@ -55,7 +55,6 @@ export const createCharacter = function (characterImage) {
     },
 
     isCollidingWithObject: function (tileEngine) {
-      // return false;
       return tileEngine && tileEngine.layerCollidesWith("wall", this);
     },
 
