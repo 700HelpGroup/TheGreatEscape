@@ -1,5 +1,6 @@
 body {
   background-color: lightgray;
+  position: relative;
 }
 
 canvas {
@@ -8,10 +9,6 @@ canvas {
   top: 10px;
   background-color: gray;
   border: 1px solid white;
-}
-
-#root {
-  position: relative;
 }
 
 #startButton {
@@ -36,17 +33,6 @@ canvas {
 
 #restartButton,
 #exitButton {
-  background: "none";
-  display: none;
-}
-
-#restartButton,
-#exitButton,
-#upButton,
-#downButton,
-#leftButton,
-#rightButton,
-#spaceButton {
   position: absolute;
   color: white;
   font: bold 20px arial;
@@ -57,6 +43,8 @@ canvas {
   padding: 10px;
   border-radius: 4px;
   cursor: pointer;
+  background: "none";
+  display: none;
 }
 
 #exitButton {
@@ -66,65 +54,12 @@ canvas {
 
 @keyframes glow {
   from {
-    text-shadow: 0 0 10px #bcd1f7, 0 0 12px #bcd1f7, 0 0 15px #bcd1f7, 0 0 18px #bcd1f7,
-      0 0 20px #bcd1f7;
+    text-shadow: 0 0 10px #bcd1f7, 0 0 12px #bcd1f7, 0 0 15px #bcd1f7,
+      0 0 18px #bcd1f7, 0 0 20px #bcd1f7;
   }
 
   to {
-    text-shadow: 0 0 18px #bcd1f7, 0 0 22px #bcd1f7, 0 0 25px #bcd1f7, 0 0 30px #bcd1f7,
-      0 0 35px #bcd1f7;
+    text-shadow: 0 0 18px #bcd1f7, 0 0 22px #bcd1f7, 0 0 25px #bcd1f7,
+      0 0 30px #bcd1f7, 0 0 35px #bcd1f7;
   }
-}
-
-#upButton,
-#downButton,
-#leftButton,
-#rightButton,
-#spaceButton {
-  background: "blue";
-  color: gray;
-  width: 100px;
-  height: 100px;
-  font-size: 15px;
-  user-select: none;
-  pointer-events: none;
-}
-
-#upButton,
-#downButton {
-  left: calc(50% - 200px);
-  top: 470px;
-}
-
-#downButton,
-#leftButton,
-#rightButton,
-#spaceButton {
-  top: 580px;
-}
-
-#leftButton {
-  left: calc(50% - 310px);
-}
-
-#rightButton {
-  left: calc(50% - 90px);
-}
-
-#spaceButton {
-  left: calc(50% + 60px);
-  width: 300px;
-}
-
-#controlLabel,
-#spaceLabel {
-  position: absolute;
-  left: calc(50% - 200px);
-  top: 430px;
-  color: gray;
-}
-
-#spaceLabel {
-  left: calc(50% + 110px);
-  top: 530px;
 }

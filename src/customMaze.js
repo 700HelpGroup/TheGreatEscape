@@ -1,4 +1,4 @@
-import { MAZE_GRID_COUNT, PROP_VALUE } from "./constants";
+import { MAZE_GRID_COUNT } from "./constants";
 import generateMaze from "./maze.js";
 
 export const mazeObj = generateMaze(MAZE_GRID_COUNT);
@@ -7,7 +7,9 @@ const objectPosition = [];
 function layoutEqualTo(layout, neighbour, value) {
   return Object.entries(layout).reduce((acc, [field, bool]) => {
     const neigbourValue = neighbour[field]["value"];
-    return acc && (bool === 0 ? neigbourValue !== value : neigbourValue === value);
+    return (
+      acc && (bool === 0 ? neigbourValue !== value : neigbourValue === value)
+    );
   }, true);
 }
 
@@ -83,6 +85,14 @@ function alreadyHaveProp(cell, xRange = 0, yRange = 0) {
   return result;
 }
 
+function floorTile(cell, neighbour) {
+  if (cell.isEnd()) {
+    return "17";
+  } else {
+    return "1";
+  }
+}
+
 function wallTile(cell, neighbour, maxRow, maxCol) {
   if (cell.isWall()) {
     if (cell.row === 0 && cell.col === maxCol) return "5";
@@ -118,7 +128,7 @@ function wallTile(cell, neighbour, maxRow, maxCol) {
 
 function decorationTiles(cell, neighbour) {
   if (cell.isWall() && !neighbour["bottom"].isWall()) {
-    if (!alreadyHaveProp(cell, 2, 4) && Math.random() >= 0.4) {
+    if (!alreadyHaveProp(cell, 2, 4) && Math.random() >= 0.8) {
       return "16";
     }
   }
@@ -140,7 +150,7 @@ function generateTileMap(tileFunc) {
     .flat();
 }
 
-export const groundTileLayout = generateTileMap(() => "1");
+export const groundTileLayout = generateTileMap(floorTile);
 export const wallTileLayout = generateTileMap(wallTile);
 export const decorationsLayout = generateTileMap((cell, neighbour) => {
   const tileIndex = decorationTiles(cell, neighbour);
