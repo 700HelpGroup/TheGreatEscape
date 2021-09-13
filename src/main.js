@@ -1,14 +1,27 @@
 import { canvas, context } from "./init";
-import { load, setImagePath, GameLoop, imageAssets } from "kontra";
+import { GameLoop } from "kontra";
 import { GAME_STATES } from "./constants";
 import Introduction from "./introduction";
 import Game from "./game";
 import { drawFinishScene } from "./finishScreen";
 
 let gameState = GAME_STATES.IDLE;
+const assetsToLoad = ["character.png", "robot.png", "tiles.png"];
+let imageAssets = {};
 
-setImagePath("assets/");
-load("character.png", "robot.png", "tiles.png").then(() => {
+assetsToLoad.forEach((asset) => {
+  const image = new Image();
+  image.src = `assets/${asset}`;
+  image.onload = function () {
+    imageAssets[asset.replace(".png", "")] = image;
+    if (Object.values(imageAssets).length === assetsToLoad.length) {
+      console.log(imageAssets);
+      onAllAssetLoaded();
+    }
+  };
+});
+
+const onAllAssetLoaded = () => {
   document.getElementById("startButton")?.addEventListener("click", startGame);
 
   const [clearIntroduction, reDrawIntroduction] = Introduction(context, canvas);
@@ -47,6 +60,31 @@ load("character.png", "robot.png", "tiles.png").then(() => {
     },
   });
 
+  function update() {
+    switch (gameState) {
+      case GAME_STATES.RUNNING:
+        updateGame();
+      default:
+        break;
+    }
+  }
+
+  function render() {
+    switch (gameState) {
+      case GAME_STATES.IDLE:
+        reDrawIntroduction(context, canvas);
+        break;
+      case GAME_STATES.RUNNING:
+        renderGame(context, canvas);
+        break;
+      case GAME_STATES.END:
+        drawFinishScene(context, canvas);
+        break;
+      default:
+        break;
+    }
+  }
+
   function startGame() {
     const startButton = document.getElementById("startButton");
     if (startButton !== null) startButton.style.display = "none";
@@ -67,6 +105,5 @@ load("character.png", "robot.png", "tiles.png").then(() => {
     clearGame();
     gameState = GAME_STATES.END;
   }
-
   gameLoop.start();
-});
+};

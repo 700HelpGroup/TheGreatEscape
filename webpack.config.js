@@ -1,9 +1,10 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ZipPlugin = require("zip-webpack-plugin");
+const WebpackBundleAnalyzer = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 
 module.exports = {
-  mode: "production",
+  mode: "development",
   entry: "./src/main.js",
   output: {
     filename: "main.[contenthash].js",
@@ -12,6 +13,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({ template: "./src/index.html" }),
-    new ZipPlugin({ path: __dirname, filename: "build.zip" }),
+    // new ZipPlugin({ path: __dirname, filename: "build.zip" }),
+    new WebpackBundleAnalyzer(),
   ],
 };

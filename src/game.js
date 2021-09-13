@@ -75,7 +75,7 @@ function renderGame(context, canvas) {
 }
 
 const toggleGuideMap = debounce((pos) => {
-  if (tileEngine.tileAtLayer("decoration", pos) === "36") {
+  if (tileEngine.tileAtLayer("decoration", pos) === "21") {
     guideMapShowing = !guideMapShowing;
   }
 });
@@ -202,8 +202,8 @@ function initGame(assets) {
 }
 
 export default function Game(context, canavs, assets, onExit, onFinish) {
-  if (typeof onExit === "function") onExitCallback = onExit;
-  if (typeof onFinish === "function") onFinishCallback = onFinish;
-  initGame(assets);
+  // if (typeof onExit === "function") onExitCallback = onExit;
+  // if (typeof onFinish === "function") onFinishCallback = onFinish;
+  // initGame(assets);
   return [updateGame, renderGame, clear, initGame];
 }
