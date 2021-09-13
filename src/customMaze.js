@@ -84,98 +84,49 @@ function alreadyHaveProp(cell, xRange = 0, yRange = 0) {
 }
 
 function floorTile(cell, neighbour) {
-  if (cell.isGround()) {
-    if (isTopDeadEnd(neighbour, PROP_VALUE.WALL)) return "1";
-    else if (isBottomDeadEnd(neighbour, PROP_VALUE.WALL)) return "2";
-    else if (isLeftDeadEnd(neighbour, PROP_VALUE.WALL)) return "3";
-    else if (isRightDeadEnd(neighbour, PROP_VALUE.WALL)) return "4";
-    else if (isTopLeftTurn(neighbour, PROP_VALUE.WALL)) return "5";
-    else if (isBottomLeftTurn(neighbour, PROP_VALUE.WALL)) return "6";
-    else if (isBottomRightTurn(neighbour, PROP_VALUE.WALL)) return "7";
-    else if (isTopRightTurn(neighbour, PROP_VALUE.WALL)) return "8";
-    else if (isVerticalStraightPath(neighbour, PROP_VALUE.WALL)) return "9";
-    else if (isHorizontalStraightPath(neighbour, PROP_VALUE.WALL)) return "10";
-    else if (isBottom(neighbour, PROP_VALUE.WALL)) return "12";
-    else if (isLeft(neighbour, PROP_VALUE.WALL)) return "11";
-    else if (isRight(neighbour, PROP_VALUE.WALL)) return "13";
-    else if (isTop(neighbour, PROP_VALUE.WALL)) return "14";
-    else if (isAllClear(neighbour, PROP_VALUE.WALL)) return "15";
-  } else if (cell.isStart() || cell.isEnd()) return "16";
-  return "17";
+  return "1";
 }
 
 function wallTile(cell, neighbour, maxRow, maxCol) {
   if (cell.isWall()) {
-    if (cell.row === 0 && cell.col === maxCol) return "21";
-    if (cell.row === 0 && cell.col === 0) return "22";
-    if (cell.row === 0) return neighbour["bottom"].isWall() ? "23" : "28";
-    if (cell.row === MAZE_GRID_COUNT - 1 && cell.col === 0) return "27";
-    if (cell.row === maxRow && cell.col === maxCol) return "26";
-    if (cell.row === maxRow) return neighbour["top"].isWall() ? "25" : "28";
-    if (cell.col === 0) return neighbour["right"].isWall() ? "22" : "20";
-    if (cell.col === maxCol) return neighbour["left"].isWall() ? "21" : "20";
+    if (cell.row === 0 && cell.col === maxCol) return "5";
+    if (cell.row === 0 && cell.col === 0) return "6";
+    if (cell.row === 0) return neighbour["bottom"].isWall() ? "7" : "12";
+    if (cell.row === MAZE_GRID_COUNT - 1 && cell.col === 0) return "11";
+    if (cell.row === maxRow && cell.col === maxCol) return "10";
+    if (cell.row === maxRow) return neighbour["top"].isWall() ? "9" : "12";
+    if (cell.col === 0) return neighbour["right"].isWall() ? "6" : "4";
+    if (cell.col === maxCol) return neighbour["left"].isWall() ? "5" : "4";
 
-    if (isTopDeadEnd(neighbour, " ")) return "19";
-    else if (isVerticalStraightPath(neighbour, " ")) return "20";
-    else if (isRight(neighbour, " ")) return "21";
-    else if (isLeft(neighbour, " ")) return "22";
-    else if (isAllClear(neighbour, " ")) return "23";
-    else if (isBottomDeadEnd(neighbour, " ")) return "24";
-    else if (isBottom(neighbour, " ")) return "25";
-    else if (isBottomRightTurn(neighbour, " ")) return "26";
-    else if (isBottomLeftTurn(neighbour, " ")) return "27";
+    if (isTopDeadEnd(neighbour, " ")) return "3";
+    else if (isVerticalStraightPath(neighbour, " ")) return "4";
+    else if (isRight(neighbour, " ")) return "5";
+    else if (isLeft(neighbour, " ")) return "6";
+    else if (isAllClear(neighbour, " ")) return "7";
+    else if (isBottomDeadEnd(neighbour, " ")) return "8";
+    else if (isBottom(neighbour, " ")) return "9";
+    else if (isBottomRightTurn(neighbour, " ")) return "10";
+    else if (isBottomLeftTurn(neighbour, " ")) return "11";
     else if (
       isHorizontalStraightPath(neighbour, " ") ||
       isLeftDeadEnd(neighbour, " ") ||
       isRightDeadEnd(neighbour, " ")
     )
-      return "28";
-    else if (isTopLeftTurn(neighbour, " ")) return "29";
-    else if (isTopRightTurn(neighbour, " ")) return "30";
-    else if (isTop(neighbour, " ")) return "31";
+      return "12";
+    else if (isTopLeftTurn(neighbour, " ")) return "13";
+    else if (isTopRightTurn(neighbour, " ")) return "14";
+    else if (isTop(neighbour, " ")) return "15";
   }
   return 0;
 }
 
 function decorationTiles(cell, neighbour) {
   if (cell.isWall() && !neighbour["bottom"].isWall()) {
-    if (
-      cell["row"] === 0 &&
-      cell["col"] !== 0 &&
-      neighbour["left"].isWall() &&
-      neighbour["right"].isWall()
-    ) {
-      const botLeftIsWall = neighbour["bottomLeft"].isWall();
-      const botrightIsWall = neighbour["bottomRight"].isWall();
-      if (botLeftIsWall && !botrightIsWall) {
-        return "34";
-      } else if (!botLeftIsWall && !botrightIsWall) {
-        return "35";
-      } else if (!botLeftIsWall && botrightIsWall) {
-        return "36";
-      } else if (botLeftIsWall && botrightIsWall) {
-        return "37";
-      }
-    }
     if (!alreadyHaveProp(cell, 2, 4) && Math.random() >= 0.4) {
-      return "38";
+      return "36";
     }
   }
 
-  return 0;
-}
-
-function proptTiles(cell, neighbour) {
-  if (
-    cell.isGround() &&
-    (isLeftDeadEnd(neighbour, PROP_VALUE.WALL) ||
-      isTopDeadEnd(neighbour, PROP_VALUE.WALL) ||
-      isRightDeadEnd(neighbour, PROP_VALUE.WALL) ||
-      isBottomDeadEnd(neighbour, PROP_VALUE.WALL)) &&
-    Math.random() >= 0.7
-  ) {
-    return "39";
-  }
   return 0;
 }
 
@@ -195,11 +146,6 @@ function generateTileMap(tileFunc) {
 
 export const groundTileLayout = generateTileMap(floorTile);
 export const wallTileLayout = generateTileMap(wallTile);
-export const propsLayout = generateTileMap((cell, neighbour) => {
-  const propIndex = proptTiles(cell, neighbour);
-  if (propIndex !== 0) objectPosition.push({ x: cell["row"], y: cell["col"] });
-  return propIndex;
-});
 export const decorationsLayout = generateTileMap((cell, neighbour) => {
   const tileIndex = decorationTiles(cell, neighbour);
   if (tileIndex !== 0) objectPosition.push({ x: cell["row"], y: cell["col"] });

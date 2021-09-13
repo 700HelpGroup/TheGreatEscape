@@ -1,4 +1,4 @@
-import { Sprite, keyPressed, emit, SpriteSheet } from "kontra";
+import { Sprite, keyPressed, SpriteSheet } from "kontra";
 import { CELL_WIDTH, CELL_HEIGHT, MAZE_GRID_COUNT, CANVAS_WIDTH, CANVAS_HEIGHT } from "./constants";
 
 const moveDelta = 2;
@@ -56,10 +56,7 @@ export const createCharacter = function (characterImage) {
 
     isCollidingWithObject: function (tileEngine) {
       // return false;
-      return (
-        tileEngine &&
-        (tileEngine.layerCollidesWith("wall", this) || tileEngine.layerCollidesWith("props", this))
-      );
+      return tileEngine && tileEngine.layerCollidesWith("wall", this);
     },
 
     updateCameraY: function (tileEngine) {
@@ -108,10 +105,6 @@ export const createCharacter = function (characterImage) {
         if (this.isCollidingWithObject(tileEngine)) this.y = prevY;
         this.direction = "down";
         this.playAnimation("moveDown");
-      }
-
-      if (this.x !== prevX || this.y !== prevY) {
-        emit("characterMoved");
       }
     },
   });

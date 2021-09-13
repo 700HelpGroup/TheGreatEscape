@@ -6,7 +6,6 @@ export const CELL_HEIGHT = 32;
 export const ROBOT_COUNT = 5;
 export const GAME_STATES = {
   IDLE: 0,
-  START: 1,
   RUNNING: 2,
   END: 3,
 };

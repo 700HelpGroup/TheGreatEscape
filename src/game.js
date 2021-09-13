@@ -1,22 +1,10 @@
 import { TileEngine, keyPressed, collides } from "kontra";
-import {
-  groundTileLayout,
-  wallTileLayout,
-  decorationsLayout,
-  propsLayout,
-  mazeObj,
-} from "./customMaze";
-import {
-  CELL_HEIGHT,
-  CELL_WIDTH,
-  MAZE_GRID_COUNT,
-  ROBOT_COUNT,
-} from "./constants";
+import { groundTileLayout, wallTileLayout, decorationsLayout, mazeObj } from "./customMaze";
+import { CELL_HEIGHT, CELL_WIDTH, MAZE_GRID_COUNT, ROBOT_COUNT } from "./constants";
 import { createCharacter } from "./character";
 import { createRobot } from "./Ai";
 import { debounce, canvasDiagnLength, intersects } from "./helper";
 import { drawGuideMap, drawFlashScreen, drawText } from "./canvasObjects";
-import { fog } from "./fog";
 
 let tileEngine = null;
 let robots = [];
@@ -35,8 +23,7 @@ function checkCapture() {
   if (
     robots.some(
       ({ robot, vision }) =>
-        collides(robot, character) ||
-        intersects(vision.boundingRect, { x, y, width, height })
+        collides(robot, character) || intersects(vision.boundingRect, { x, y, width, height })
     )
   ) {
     playerCaptured = true;
@@ -60,12 +47,10 @@ function checkFinish() {
 function updateGame() {
   if (tileEngine === null) return;
   if (character === null) return;
-  if (keyPressed("space"))
-    toggleGuideMap({ x: character.x, y: character.y - CELL_HEIGHT });
+  if (keyPressed("space")) toggleGuideMap({ x: character.x, y: character.y - CELL_HEIGHT });
   if (guideMapShowing) return;
   if (playerCaptured) return;
   character.update();
-  fog.update(character);
   character.updateCharacterMovement(tileEngine);
   robots.forEach(({ robot, vision }) => {
     robot.update();
@@ -81,18 +66,16 @@ function renderGame(context, canvas) {
   if (character === null) return;
   tileEngine.render();
   character.render();
-  fog.render();
   robots.forEach(({ robot, vision }) => {
     robot.render();
     vision.render();
   });
-  if (guideMapShowing)
-    drawGuideMap(context, canvas, mazeObj, character.x, character.y);
+  if (guideMapShowing) drawGuideMap(context, canvas, mazeObj, character.x, character.y);
   if (playerCaptured) renderCapturedScene(context, canvas);
 }
 
 const toggleGuideMap = debounce((pos) => {
-  if (tileEngine.tileAtLayer("decoration", pos) === "38") {
+  if (tileEngine.tileAtLayer("decoration", pos) === "21") {
     guideMapShowing = !guideMapShowing;
   }
 });
@@ -102,16 +85,7 @@ function renderCapturedScene(context, canvas) {
   const xPos = canvas.width * 0.5 - 150;
   const yPos = 100;
   drawFlashScreen(context, canvas, Math.max(blackScreenSize, 0));
-  drawText(
-    context,
-    canvas,
-    "GAME OVER",
-    Math.min(textItr * 0.04, 1),
-    "50px",
-    "white",
-    xPos,
-    yPos
-  );
+  drawText(context, canvas, "GAME OVER", Math.min(textItr * 0.04, 1), "50px", "white", xPos, yPos);
   drawText(
     context,
     canvas,
@@ -194,10 +168,6 @@ function initTileEngine(assets) {
         name: "decoration",
         data: decorationsLayout,
       },
-      {
-        name: "props",
-        data: propsLayout,
-      },
     ],
   });
 }
@@ -205,9 +175,7 @@ function initTileEngine(assets) {
 function initRobot(assets) {
   robots = Array(ROBOT_COUNT)
     .fill()
-    .map(() =>
-      createRobot(mazeObj, assets["robot"], () => (playerCaptured = false))
-    );
+    .map(() => createRobot(mazeObj, assets["robot"], () => (playerCaptured = false)));
 }
 
 function initCharacter(assets) {
@@ -227,7 +195,6 @@ function initGame(assets) {
   initCharacter(assets);
   initKeyOptions();
   tileEngine.addObject(character);
-  tileEngine.addObject(fog);
   robots.forEach(({ robot, vision }) => {
     tileEngine.addObject(robot);
     tileEngine.addObject(vision);
@@ -235,8 +202,8 @@ function initGame(assets) {
 }
 
 export default function Game(context, canavs, assets, onExit, onFinish) {
-  if (typeof onExit === "function") onExitCallback = onExit;
-  if (typeof onFinish === "function") onFinishCallback = onFinish;
-  initGame(assets);
+  // if (typeof onExit === "function") onExitCallback = onExit;
+  // if (typeof onFinish === "function") onFinishCallback = onFinish;
+  // initGame(assets);
   return [updateGame, renderGame, clear, initGame];
 }
