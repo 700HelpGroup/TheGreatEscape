@@ -83,10 +83,6 @@ function alreadyHaveProp(cell, xRange = 0, yRange = 0) {
   return result;
 }
 
-function floorTile(cell, neighbour) {
-  return "1";
-}
-
 function wallTile(cell, neighbour, maxRow, maxCol) {
   if (cell.isWall()) {
     if (cell.row === 0 && cell.col === maxCol) return "5";
@@ -123,7 +119,7 @@ function wallTile(cell, neighbour, maxRow, maxCol) {
 function decorationTiles(cell, neighbour) {
   if (cell.isWall() && !neighbour["bottom"].isWall()) {
     if (!alreadyHaveProp(cell, 2, 4) && Math.random() >= 0.4) {
-      return "36";
+      return "16";
     }
   }
 
@@ -144,7 +140,7 @@ function generateTileMap(tileFunc) {
     .flat();
 }
 
-export const groundTileLayout = generateTileMap(floorTile);
+export const groundTileLayout = generateTileMap(() => "1");
 export const wallTileLayout = generateTileMap(wallTile);
 export const decorationsLayout = generateTileMap((cell, neighbour) => {
   const tileIndex = decorationTiles(cell, neighbour);

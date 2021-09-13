@@ -75,7 +75,7 @@ function renderGame(context, canvas) {
 }
 
 const toggleGuideMap = debounce((pos) => {
-  if (tileEngine.tileAtLayer("decoration", pos) === "21") {
+  if (tileEngine.tileAtLayer("decoration", pos) === "16") {
     guideMapShowing = !guideMapShowing;
   }
 });

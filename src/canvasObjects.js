@@ -98,7 +98,7 @@ export function drawGuideMap(context, canvas, mazeObj, xPos, yPos) {
   context.save();
   const mapPadding = 10;
   const size = canvas.height - mapPadding * 2;
-  const cellSize = Math.floor(size / MAZE_GRID_COUNT);
+  const cellSize = size / MAZE_GRID_COUNT;
   const startX = canvas.width / 2 - size / 2;
   const startY = mapPadding;
   const characterSize = cellSize * 0.4;
