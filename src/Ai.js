@@ -6,7 +6,8 @@ import { createVision } from "./vision";
 const moveDelta = 0.5;
 
 //function creates a robot
-//good
+//make robotlings
+//waiting for new feature
 export const createRobot = (mazeObj) => {
   const robot = Sprite({
     x: null,
